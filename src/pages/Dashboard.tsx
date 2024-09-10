@@ -1,5 +1,5 @@
 import Header from "../components/layout/Header";
-import Main from "../features/Dashboard/components/Main";
+import Main from "../features/Dashboard/Main";
 
 function Dashboard() {
   return (

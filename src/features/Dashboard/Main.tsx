@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import Button from "../../../components/parts/Button";
+import Button from "../../components/parts/Button";
+import Cards from "./components/Cards";
 
 const MainContainer = styled.div`
   align-items: center;
@@ -38,8 +39,9 @@ function Main() {
         text="出席を記録する"
         onClick={() => console.log("ボタンが押されたよ！！")}
         color="#cad1f7"
-        textStyle={{ fontSize: "1.4em" }}
+        textStyle={{ fontSize: "1.6em", color: "#000" }}
       />
+      <Cards />
     </MainContainer>
   );
 }
