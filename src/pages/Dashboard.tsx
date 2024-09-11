@@ -1,11 +1,15 @@
+import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
-import Main from "../features/Dashboard/DashboardMain";
+import DashboardMain from "../features/Dashboard/DashboardMain";
 
 function Dashboard() {
   return (
-    <div>
+    <div className="wrapper">
       <Header />
-      <Main />
+      <main>
+        <DashboardMain />
+      </main>
+      <Footer />
     </div>
   );
 }

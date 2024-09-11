@@ -1,13 +1,12 @@
 import styled from "styled-components";
 
-const StyledHeader = styled.div`
+const StyledHeader = styled.header`
   align-items: center;
   background-color: #d9d9d9;
   display: flex;
   height: 87px;
   justify-content: space-between;
   padding: 20px;
-  position: relative;
 
   & .logo {
     background-color: #a110ae;
@@ -32,8 +31,6 @@ const UserBox = styled.div`
 `;
 
 const UserInfo = styled.div`
-  margin: 0;
-
   p {
     margin: 2px 0;
   }

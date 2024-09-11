@@ -29,7 +29,7 @@ const Organization = styled.div`
   }
 `;
 
-function Main() {
+function DashbordMain() {
   return (
     <MainContainer>
       <Organization>
@@ -46,4 +46,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default DashbordMain;

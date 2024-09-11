@@ -1,18 +1,7 @@
 import styled from "styled-components";
 import TimeBox from "../atoms/TimeBox";
 
-const StyledTodaysActivity = styled.div`
-  align-items: flex-start;
-  background-color: #e7f3ff;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-  padding: 20px 15px;
-  position: relative;
-  width: 100%;
-`;
+import StyledCards from "../style/StyledCards";
 
 const StyledToday = styled.div`
   align-items: flex-start;
@@ -42,19 +31,19 @@ const StyledAttendTime = styled.div`
   padding: 0 15px;
   position: relative;
   width: 100%;
-  margin: 0;
 
   & p {
     position: relative;
     white-space: nowrap;
     width: fit-content;
     font-size: 1.2em;
+    margin: 3px 0;
   }
 `;
 
 function TodaysActivity() {
   return (
-    <StyledTodaysActivity>
+    <StyledCards>
       <StyledToday>
         <h4>今日の活動記録</h4>
         <StyledAttendTime>
@@ -63,7 +52,7 @@ function TodaysActivity() {
         </StyledAttendTime>
       </StyledToday>
       <TimeBox label="活動時間" time="00h 00min" />
-    </StyledTodaysActivity>
+    </StyledCards>
   );
 }
 

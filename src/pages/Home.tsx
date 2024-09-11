@@ -25,7 +25,7 @@ const A = styled.a`
 function Home() {
   return (
     <Container>
-      <div>
+      <div className="wrapper">
         <Title>ATRS アトラス</Title>
         <A href="/dashboard">Go to Dashboard</A>
       </div>

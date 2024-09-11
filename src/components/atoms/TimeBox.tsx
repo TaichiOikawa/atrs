@@ -31,7 +31,8 @@ const StyledTimeBox = styled.div`
   }
 
   & p {
-    font-size: 1.3em;
+    font-size: 1.4em;
+    margin: 2px 0;
   }
 `;
 
