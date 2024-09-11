@@ -1,9 +1,7 @@
-import TodaysActivity from "./TodaysActivity";
+import TodaysActivity from "../../../components/parts/TodaysActivity";
 
 function Cards() {
-	return (
-		<TodaysActivity />
-	)
+  return <TodaysActivity />;
 }
 
 export default Cards;

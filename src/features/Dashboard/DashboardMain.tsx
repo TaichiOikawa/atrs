@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from "../../components/parts/Button";
+import Button from "../../components/atoms/Button";
 import Cards from "./components/Cards";
 
 const MainContainer = styled.div`
