@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Api_URL } from "../../App";
 import Button from "../../components/atoms/Button";
 import Cards from "./components/Cards";
 
@@ -29,6 +30,17 @@ const Organization = styled.div`
   }
 `;
 
+const attendButton = () => {
+  fetch(`${Api_URL}/api/attend`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ attendTime: new Date() }),
+  }).then((data) => console.log(data));
+};
+
 function DashbordMain() {
   return (
     <MainContainer>
@@ -37,7 +49,7 @@ function DashbordMain() {
       </Organization>
       <Button
         text="出席を記録する"
-        onClick={() => console.log("ボタンが押されたよ！！")}
+        onClick={attendButton}
         color="#cad1f7"
         textStyle={{ fontSize: "1.6em", color: "#000" }}
       />

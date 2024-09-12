@@ -41,17 +41,24 @@ const StyledAttendTime = styled.div`
   }
 `;
 
-function TodaysActivity() {
+type TodaysActivityProps = {
+  attendTime: string | "";
+  leaveTime: string | "";
+};
+
+function TodaysActivity(props: TodaysActivityProps) {
+  const todaysActivityTime = "00h 00min";
+
   return (
     <StyledCards>
       <StyledToday>
         <h4>今日の活動記録</h4>
         <StyledAttendTime>
-          <p>出席時間：</p>
-          <p>離席時間：</p>
+          <p>出席時間：{props.attendTime}</p>
+          <p>離席時間：{props.leaveTime}</p>
         </StyledAttendTime>
       </StyledToday>
-      <TimeBox label="活動時間" time="00h 00min" />
+      <TimeBox label="活動時間" time={todaysActivityTime} />
     </StyledCards>
   );
 }
