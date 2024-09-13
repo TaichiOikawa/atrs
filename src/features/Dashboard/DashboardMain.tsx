@@ -27,6 +27,7 @@ const Organization = styled.div`
 
   & h2 {
     font-size: 2em;
+    margin: 0;
   }
 `;
 
@@ -41,11 +42,12 @@ const attendButton = () => {
   }).then((data) => console.log(data));
 };
 
-function DashbordMain() {
+function DashboardMain() {
+  const organization = "Organization Name";
   return (
     <MainContainer>
       <Organization>
-        <h2>北見北斗生徒会執行部</h2>
+        <h2>{organization}</h2>
       </Organization>
       <Button
         text="出席を記録する"
@@ -58,4 +60,4 @@ function DashbordMain() {
   );
 }
 
-export default DashbordMain;
+export default DashboardMain;
