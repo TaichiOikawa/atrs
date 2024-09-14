@@ -27,7 +27,8 @@ function Home() {
     <Container>
       <div className="wrapper">
         <Title>ATRS アトラス</Title>
-        <A href="/dashboard">Go to Dashboard</A>
+        <A href="/login">Login</A>
+        <A href="/sign-up">Sign Up</A>
       </div>
     </Container>
   );
