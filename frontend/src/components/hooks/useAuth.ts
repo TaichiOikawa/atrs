@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { checkJwt } from "../../api";
+import { checkJwt } from "../../api/auth";
 
 type userInfoType = {
   user_id: number;

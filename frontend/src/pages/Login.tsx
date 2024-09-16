@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { User, login } from "../api/index";
+import { User, login } from "../api/auth";
 
 export const LoginPage = () => {
   const {

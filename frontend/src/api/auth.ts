@@ -1,13 +1,5 @@
 import axios from "axios";
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "http://localhost:3000";
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.post["Access-Control-Allow-Methods"] =
-  "HEAD, GET, POST, PUT, DELETE, OPTIONS, PATCH";
-axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-axios.defaults.headers.post["Access-Control-Allow-Credentials"] = "true";
-
 export type User = {
   id?: number;
   name?: string;

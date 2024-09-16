@@ -1,4 +1,6 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { getActivityStatus, postActivity } from "../../api/activity";
 import Button from "../../components/atoms/Button";
 import Cards from "./components/Cards";
 
@@ -30,19 +32,22 @@ const Organization = styled.div`
   }
 `;
 
-const attendButton = () => {
-  fetch(`/api/attend`, {
-    method: "POST",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ attendTime: new Date() }),
-  }).then((data) => console.log(data));
-};
-
 function DashboardMain() {
   const organization = "Organization Name";
+  const [ActivityStatus, setActivityStatus] = useState<string>();
+
+  const postActivityButton = async () => {
+    const req = await getActivityStatus();
+    setActivityStatus(req.type);
+    if (ActivityStatus === "attend") {
+      await postActivity({ type: "leave" });
+    } else {
+      await postActivity({ type: "attend" });
+    }
+    // 動いてる？？
+    console.log(ActivityStatus);
+  };
+
   return (
     <MainContainer>
       <Organization>
@@ -50,7 +55,7 @@ function DashboardMain() {
       </Organization>
       <Button
         text="出席を記録する"
-        onClick={attendButton}
+        onClick={async () => await postActivityButton()}
         color="#cad1f7"
         textStyle={{ fontSize: "1.6em", color: "#000" }}
       />

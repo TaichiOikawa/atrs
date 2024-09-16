@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { logout } from "../../api";
+import { logout } from "../../api/auth";
 
 const StyledHeader = styled.header`
   align-items: center;
