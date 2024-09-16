@@ -3,7 +3,6 @@ import TodaysActivity from "../../../components/parts/TodaysActivity";
 import WeeklyActivity from "../../../components/parts/WeeklyActivity";
 
 import { useEffect, useState } from "react";
-import { Api_URL } from "../../../App";
 
 const StyledCards = styled.div`
   align-items: flex-start;
@@ -29,7 +28,7 @@ function Cards() {
   });
 
   useEffect(() => {
-    fetch(`${Api_URL}/api/activity`, { method: "GET", mode: "cors" })
+    fetch(`/api/activity`, { method: "GET", mode: "cors" })
       .then((res) => res.json())
       .then((data) => setActivity(data));
   }, []);

@@ -5,7 +5,6 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --exec ts-node src/app.ts",
-    "db-init": "npx ts-node src/dbInit.ts",
     "mytest": "npx ts-node src/test.ts"
   },
   "dependencies": {

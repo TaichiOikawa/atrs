@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { logout } from "../../api";
 
 const StyledHeader = styled.header`
   align-items: center;
@@ -31,19 +33,28 @@ const UserBox = styled.div`
 `;
 
 const UserInfo = styled.div`
+  .userName {
+    font-size: 1.25em;
+  }
   p {
-    margin: 2px 0;
+    margin: 0 0;
+    font-size: 0.85em;
   }
 `;
 
 function Header() {
-  const userName: string = "HogeHoge";
-  const id: number = 123456;
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
+  const userName: string = sessionStorage.getItem("name") || "Guest";
+  const LoginId: string = sessionStorage.getItem("loginId") || "Guest";
 
   return (
     <StyledHeader>
       <div className="logo" />
-      {/* 後でボタンにする　Logout */}
       <UserBox>
         <img
           className="account-icon"
@@ -51,11 +62,10 @@ function Header() {
           src="/account-icon.svg"
         />
         <UserInfo>
-          <p>
-            Logged in as <span>{userName}</span>
-          </p>
-          <p>ID: {id}</p>
+          <p className="userName">{userName}</p>
+          <p>Login ID: {LoginId}</p>
         </UserInfo>
+        <button onClick={() => handleLogout()}>Logout</button>
       </UserBox>
     </StyledHeader>
   );

@@ -17,29 +17,20 @@ export const SignUpPage = () => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="firstName">
-          性
-          <input
-            id="firstName"
-            type="text"
-            {...register("firstName", { required: true })}
-          />
-        </label>
-        <p> {errors.firstName && "文字が入力されていません"}</p>
-        <label htmlFor="lastName">名</label>
+        <label htmlFor="name">名前</label>
         <input
-          id="lastName"
+          id="name"
           type="text"
-          {...register("lastName", { required: true })}
+          {...register("name", { required: true })}
         />
-        <p> {errors.lastName && "文字が入力されていません"}</p>
-        <label htmlFor="email_register">Eメール</label>
+        <p> {errors.name && "文字が入力されていません"}</p>
+        <label htmlFor="loginId_register">Eメール</label>
         <input
-          id="email_register"
-          type="email"
-          {...register("mail", { required: true })}
+          id="loginId_register"
+          type="text"
+          {...register("loginId", { required: true })}
         />
-        <p> {errors.mail && "文字が入力されていません"}</p>
+        <p> {errors.loginId && "文字が入力されていません"}</p>
         <label htmlFor="password_register">パスワード</label>
         <input
           id="password_register"

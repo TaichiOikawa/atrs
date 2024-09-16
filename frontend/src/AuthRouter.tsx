@@ -6,6 +6,11 @@ type Props = {
   children: React.ReactNode;
 };
 
+type CheckProps = {
+  authedNavigate: string;
+  children: React.ReactNode;
+};
+
 export const PrivateRoute = ({ children }: Props) => {
   const check = useAuth();
 
@@ -16,7 +21,7 @@ export const PrivateRoute = ({ children }: Props) => {
     return <>{children}</>;
   }
 
-  return <Navigate to="/404" />;
+  return <Navigate to="/" />;
 };
 
 export const GuestRoute = (props: Props) => {
@@ -28,9 +33,17 @@ export const GuestRoute = (props: Props) => {
     return <div>Loading...</div>;
   }
 
-  if (check.isAuthenticated) {
-    return <Navigate to="/home" />;
-  }
+  return <>{children}</>;
+};
 
+export const CheckRoute = ({ authedNavigate, children }: CheckProps) => {
+  const check = useAuth();
+
+  if (!check.checked) {
+    return <div>Loading...</div>;
+  }
+  if (check.isAuthenticated) {
+    return <Navigate to={authedNavigate} />;
+  }
   return <>{children}</>;
 };

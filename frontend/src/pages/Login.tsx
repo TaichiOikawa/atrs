@@ -18,13 +18,13 @@ export const LoginPage = () => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email_register">Eメール</label>
+        <label htmlFor="loginId_register">ログインID</label>
         <input
-          id="email_register"
-          type="email"
-          {...register("mail", { required: true })}
+          id="loginId_register"
+          type="text"
+          {...register("loginId", { required: true })}
         />
-        <p> {errors.mail && "文字が入力されていません"}</p>
+        <p> {errors.loginId && "文字が入力されていません"}</p>
         <label htmlFor="password_register">パスワード</label>
         <input
           id="password_register"

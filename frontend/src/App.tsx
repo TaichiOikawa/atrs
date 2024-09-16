@@ -1,12 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import { GuestRoute, PrivateRoute } from "./AuthRouter";
+import { CheckRoute, GuestRoute, PrivateRoute } from "./AuthRouter";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import { LoginPage } from "./pages/Login";
 import { NotFoundPage } from "./pages/NotFound";
 import { SignUpPage } from "./pages/SignUp";
-
-const Api_URL = "http://localhost:3000";
 
 function App() {
   return (
@@ -18,11 +16,21 @@ function App() {
         />
         <Route
           path="/login"
-          element={<GuestRoute children={<LoginPage />}></GuestRoute>}
+          element={
+            <CheckRoute
+              children={<LoginPage />}
+              authedNavigate="/dashboard"
+            ></CheckRoute>
+          }
         />
         <Route
           path="/sign-up"
-          element={<GuestRoute children={<SignUpPage />}></GuestRoute>}
+          element={
+            <CheckRoute
+              children={<SignUpPage />}
+              authedNavigate="/dashboard"
+            ></CheckRoute>
+          }
         />
         <Route
           path="/dashboard"
@@ -35,4 +43,3 @@ function App() {
 }
 
 export default App;
-export { Api_URL };

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Api_URL } from "../../App";
 import Button from "../../components/atoms/Button";
 import Cards from "./components/Cards";
 
@@ -32,7 +31,7 @@ const Organization = styled.div`
 `;
 
 const attendButton = () => {
-  fetch(`${Api_URL}/api/attend`, {
+  fetch(`/api/attend`, {
     method: "POST",
     mode: "cors",
     headers: {
