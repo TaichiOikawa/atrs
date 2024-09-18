@@ -19,6 +19,7 @@ type ButtonProps = {
   onClick: () => void;
   color?: string;
   textStyle?: object;
+  className?: string;
 };
 
 function Button(props: ButtonProps) {
@@ -26,6 +27,7 @@ function Button(props: ButtonProps) {
     <StyledButton
       onClick={props.onClick}
       style={{ backgroundColor: props.color }}
+      className={props.className}
     >
       <div style={props.textStyle}>{props.text}</div>
     </StyledButton>

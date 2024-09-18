@@ -10,7 +10,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 4em;
+  font-size: 4rem;
   text-align: center;
   color: #65b4f4;
   margin: 0;
@@ -19,7 +19,7 @@ const Title = styled.h1`
 const A = styled.a`
   display: block;
   text-align: center;
-  font-size: 1.5em;
+  font-size: 1.5rem;
 `;
 
 function Home() {

@@ -9,9 +9,12 @@ export class Activity {
   @ManyToOne(() => User, (user) => user.activities, { onDelete: "CASCADE" })
   user: User;
 
-  @Column({ type: "varchar", length: 10 })
-  type: "attend" | "leave";
+  @Column({ type: "datetime" })
+  attendTime: Date;
 
-  @Column({ type: "datetime", default: () => "now()" })
-  datetime: Date;
+  @Column({ type: "datetime", nullable: true, default: null })
+  leaveTime: Date;
+
+  @Column({ type: "time", nullable: true, default: null })
+  activityTime: String;
 }

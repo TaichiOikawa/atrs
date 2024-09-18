@@ -14,6 +14,6 @@ const StyledCards = styled.div`
   position: relative;
   width: 100%;
   min-width: 260px;
-`
+`;
 
 export default StyledCards;

@@ -34,11 +34,11 @@ const UserBox = styled.div`
 
 const UserInfo = styled.div`
   .userName {
-    font-size: 1.25em;
+    font-size: 1.25rem;
   }
   p {
     margin: 0 0;
-    font-size: 0.85em;
+    font-size: 0.85rem;
   }
 `;
 

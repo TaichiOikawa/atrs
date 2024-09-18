@@ -1,11 +1,47 @@
 import axios from "axios";
 
-export const getActivityStatus = async () => {
-  const res = await axios.get(`/api/activity/status`);
+const datetime = new Intl.DateTimeFormat(undefined, {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+});
+
+export const getActivity = async () => {
+  console.log("GET /api/activity");
+  const res = await axios.get(`/api/activity`);
+
+  res.data.attendTime = datetime.format(new Date(res.data.attendTime));
+  if (res.data.leaveTime !== "") {
+    res.data.leaveTime = datetime.format(new Date(res.data.leaveTime));
+    const time = res.data.activityTime.split(":");
+    res.data.activityTime = `${time[0]}h ${time[1]}min`;
+  }
+  if (res.data.weeklyTime !== "") {
+    const time = res.data.weeklyTime.split(":");
+    res.data.weeklyTime = `${time[0]}h ${time[1]}min`;
+  }
+  if (res.data.totalTime !== "") {
+    const time = res.data.totalTime.split(":");
+    res.data.totalTime = `${time[0]}h ${time[1]}min`;
+  }
   return res.data;
 };
 
-export const postActivity = async (data: { type: "attend" | "leave" }) => {
-  await axios.post(`/api/activity`, data);
-  return;
+export const getActivityStatus = async (): Promise<boolean> => {
+  console.log("GET /api/activity/status");
+  const res = await axios.get(`/api/activity/status`);
+  if (res.data === "attend") {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const postActivity = async () => {
+  console.log("POST /api/activity");
+  const res = await axios.post(`/api/activity`);
+  return res.data;
 };

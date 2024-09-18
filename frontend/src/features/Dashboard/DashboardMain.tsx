@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getActivityStatus, postActivity } from "../../api/activity";
-import Button from "../../components/atoms/Button";
+import {
+  getActivity,
+  getActivityStatus,
+  postActivity,
+} from "../../api/activity";
 import Cards from "./components/Cards";
+import RecordButton from "./components/RecordButton";
 
 const MainContainer = styled.div`
   align-items: center;
@@ -27,25 +31,52 @@ const Organization = styled.div`
   width: 100%;
 
   & h2 {
-    font-size: 2em;
+    font-size: 2rem;
     margin: 0;
   }
 `;
 
+type Activity = {
+  attendTime: string;
+  leaveTime: string;
+  activityTime: string;
+  weeklyTime: string;
+  totalTime: string;
+};
+
 function DashboardMain() {
   const organization = "Organization Name";
-  const [ActivityStatus, setActivityStatus] = useState<string>();
+  const [isAttend, setIsAttend] = useState<boolean>(false);
+  const [Activity, setActivity] = useState<Activity>({
+    attendTime: "",
+    leaveTime: "",
+    activityTime: "",
+    weeklyTime: "",
+    totalTime: "",
+  });
+
+  console.log("DashboardMainが再描画されました");
+  console.log("isAttend:", isAttend);
+  console.log("Activity:", Activity);
+
+  useEffect(() => {
+    (async () => {
+      // 活動状態を取得
+      const updatedIsAttend = await getActivityStatus();
+      setIsAttend(updatedIsAttend);
+      // 活動記録を取得
+      const activity = await getActivity();
+      setActivity(activity);
+    })();
+  }, []);
 
   const postActivityButton = async () => {
-    const req = await getActivityStatus();
-    setActivityStatus(req.type);
-    if (ActivityStatus === "attend") {
-      await postActivity({ type: "leave" });
-    } else {
-      await postActivity({ type: "attend" });
-    }
-    // 動いてる？？
-    console.log(ActivityStatus);
+    await postActivity();
+    const updatedActivity = await getActivity();
+    setActivity(updatedActivity);
+    const updatedIsAttend = await getActivityStatus();
+    setIsAttend(updatedIsAttend);
+    console.log(`[postActivityButton] updatedActivity:`, updatedActivity);
   };
 
   return (
@@ -53,13 +84,11 @@ function DashboardMain() {
       <Organization>
         <h2>{organization}</h2>
       </Organization>
-      <Button
-        text="出席を記録する"
-        onClick={async () => await postActivityButton()}
-        color="#cad1f7"
-        textStyle={{ fontSize: "1.6em", color: "#000" }}
+      <RecordButton
+        isAttend={isAttend}
+        postActivityButton={postActivityButton}
       />
-      <Cards />
+      <Cards activity={Activity} />
     </MainContainer>
   );
 }

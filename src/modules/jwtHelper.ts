@@ -27,7 +27,6 @@ export class jwtHelper {
   static verifyToken(token: string) {
     try {
       const decoded = jwt.verify(token, jweSecret);
-      console.log(decoded);
       return decoded;
     } catch (err: unknown) {
       // invalid signatureは無視
@@ -38,7 +37,6 @@ export class jwtHelper {
 
   static async apiVerifyToken(req: any, res: any, next: any) {
     let token = "";
-    console.log(req.cookies);
     if (req.cookies.jwtToken) {
       token = req.cookies.jwtToken;
     } else {
@@ -63,6 +61,8 @@ export class jwtHelper {
       });
       res.cookie("jwtToken", token, {
         httpOnly: true,
+        secure: true,
+        sameSite: "none",
         expires: new Date(Date.now() + ms("2d")), // cookie expires
       });
 

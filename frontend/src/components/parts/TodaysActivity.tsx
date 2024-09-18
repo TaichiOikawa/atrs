@@ -17,7 +17,7 @@ const StyledToday = styled.div`
     align-self: stretch;
     position: relative;
     margin-top: -1px;
-    font-size: 1.4em;
+    font-size: 1.4rem;
     margin: 0;
   }
 `;
@@ -28,7 +28,7 @@ const StyledAttendTime = styled.div`
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  padding: 0 15px;
+  padding: 0 0.8rem;
   position: relative;
   width: 100%;
 
@@ -36,29 +36,36 @@ const StyledAttendTime = styled.div`
     position: relative;
     white-space: nowrap;
     width: fit-content;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     margin: 3px 0;
   }
 `;
 
 type TodaysActivityProps = {
-  attendTime: string | "";
-  leaveTime: string | "";
+  attendTime: string;
+  leaveTime: string;
+  todaysActivityTime: string;
 };
 
 function TodaysActivity(props: TodaysActivityProps) {
-  const todaysActivityTime = "00h 00min";
+  if (props.todaysActivityTime === "") {
+    var todaysActivityTime = "活動記録がありません";
+    var addStyle: object = { color: "red", fontSize: "1.1rem" };
+  } else {
+    var todaysActivityTime = props.todaysActivityTime;
+    var addStyle: object = {};
+  }
 
   return (
     <StyledCards>
       <StyledToday>
         <h4>今日の活動記録</h4>
         <StyledAttendTime>
-          <p>出席時間：{props.attendTime}</p>
-          <p>離席時間：{props.leaveTime}</p>
+          <p>出席：{props.attendTime}</p>
+          <p>離席：{props.leaveTime}</p>
         </StyledAttendTime>
       </StyledToday>
-      <TimeBox label="活動時間" time={todaysActivityTime} />
+      <TimeBox label="活動時間" time={todaysActivityTime} addStyle={addStyle} />
     </StyledCards>
   );
 }

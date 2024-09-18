@@ -2,8 +2,6 @@ import styled from "styled-components";
 import TodaysActivity from "../../../components/parts/TodaysActivity";
 import WeeklyActivity from "../../../components/parts/WeeklyActivity";
 
-import { useEffect, useState } from "react";
-
 const StyledCards = styled.div`
   align-items: flex-start;
   flex-wrap: wrap;
@@ -15,31 +13,24 @@ const StyledCards = styled.div`
 type Activity = {
   attendTime: string;
   leaveTime: string;
+  activityTime: string;
   weeklyTime: string;
   totalTime: string;
 };
 
-function Cards() {
-  const [activity, setActivity] = useState<Activity>({
-    attendTime: "",
-    leaveTime: "",
-    weeklyTime: "00h 00min",
-    totalTime: "00h 00min",
-  });
+type CardsProps = {
+  activity: Activity;
+};
 
-  useEffect(() => {
-    fetch(`/api/activity`, { method: "GET", mode: "cors" })
-      .then((res) => res.json())
-      .then((data) => setActivity(data));
-  }, []);
-
-  console.log(activity);
+function Cards({ activity }: CardsProps) {
+  console.log("Cardsが再描画されました");
 
   return (
     <StyledCards>
       <TodaysActivity
         attendTime={activity.attendTime}
         leaveTime={activity.leaveTime}
+        todaysActivityTime={activity.activityTime}
       />
       <WeeklyActivity
         weeklyTime={activity.weeklyTime}

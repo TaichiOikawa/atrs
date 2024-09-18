@@ -24,7 +24,7 @@ const StyledLeftBox = styled.div`
   position: relative;
 
   & p {
-    font-size: 1.1em;
+    font-size: 0.95rem;
     position: relative;
     white-space: nowrap;
     width: fit-content;
@@ -42,7 +42,7 @@ const StyledRightBox = styled.div`
   position: relative;
 
   & a {
-    font-size: 1.1em;
+    font-size: 1.1rem;
     position: relative;
     white-space: nowrap;
     width: fit-content;
