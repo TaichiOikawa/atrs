@@ -4,11 +4,11 @@ import DisplayPageMain from "../features/DisplayPage/DisplayPageMain";
 
 function DisplayPage() {
   return (
-    <div className="wrapper">
+    <>
       <Header />
       <DisplayPageMain />
       <Footer />
-    </div>
+    </>
   );
 }
 

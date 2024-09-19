@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const StyledCards = styled.div`
   align-items: flex-start;
-  background-color: #e7f3ff;
+  background-color: var(--card-bg-color);
   border-radius: 12px;
   display: flex;
   flex: 1;

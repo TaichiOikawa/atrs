@@ -8,12 +8,13 @@ html {
 }
 
 body {
+  font-size: 1rem;
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
 }
 
-.wrapper {
+#root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -42,4 +43,16 @@ ul, li {
 
 div, p {
   margin: 0;
+}
+
+
+:root {
+  --background-color: #e6e5e5;
+  --pale-background-color: #f3f3f3;
+  --card-bg-color: #ddefff;
+  --link-color: #2e54fd;
+  --button-default-color: #3681e2;
+  --logo-font-color: #5db1f5;
+  --attend-color: #8cd0fa;
+  --leave-color: #f3bca0;
 }

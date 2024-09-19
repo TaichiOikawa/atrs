@@ -4,19 +4,26 @@ import { logout } from "../../api/auth";
 
 const StyledHeader = styled.header`
   align-items: center;
-  background-color: #d9d9d9;
+  background-color: var(--background-color);
   display: flex;
   height: 87px;
   justify-content: space-between;
   padding: 20px;
 
   & .logo {
-    background-color: #a110ae;
-    height: 63px;
-    margin-bottom: -8px;
-    margin-top: -8px;
-    position: relative;
-    width: 100px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    color: var(--logo-font-color);
+    & h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    & p {
+      margin-top: -6px;
+      font-size: 1rem;
+    }
   }
 
   & .account-icon {
@@ -42,6 +49,17 @@ const UserInfo = styled.div`
   }
 `;
 
+const LogoutButton = styled.button`
+  background-color: var(--button-default-color);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 0.85rem;
+  margin: 0 10px;
+  padding: 10px 15px;
+  cursor: pointer;
+`;
+
 function Header() {
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -54,7 +72,10 @@ function Header() {
 
   return (
     <StyledHeader>
-      <div className="logo" />
+      <div className="logo">
+        <h1>ATRS</h1>
+        <p>アトラス</p>
+      </div>
       <UserBox>
         <img
           className="account-icon"
@@ -65,7 +86,7 @@ function Header() {
           <p className="userName">{userName}</p>
           <p>Login ID: {LoginId}</p>
         </UserInfo>
-        <button onClick={() => handleLogout()}>Logout</button>
+        <LogoutButton onClick={() => handleLogout()}>ログアウト</LogoutButton>
       </UserBox>
     </StyledHeader>
   );

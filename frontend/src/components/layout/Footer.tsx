@@ -1,19 +1,13 @@
 import styled from "styled-components";
+import Credit from "./Credit";
 
 const StyledFooter = styled.footer`
   align-items: center;
-  background-color: #d9d9d9;
+  background-color: var(--background-color);
   display: flex;
   justify-content: space-between;
   padding: 12px 15px 20px;
   width: 100%;
-
-  & .github-icon {
-    display: block;
-    height: 34px;
-    width: 34px;
-    position: relative;
-  }
 `;
 
 const StyledLeftBox = styled.div`
@@ -53,14 +47,10 @@ function Footer() {
   return (
     <StyledFooter>
       <StyledLeftBox>
-        <p>ver. 0.0.0 (Develop)</p>
-        <p>Developed by TaichiOikawa</p>
-        <a href="https://github.com/TaichiOikawa/atrs-frontend">
-          <img className="github-icon" src="/github.svg" alt="Github Link" />
-        </a>
+        <Credit />
       </StyledLeftBox>
       <StyledRightBox>
-        <a href="">問題を報告</a>
+        <a href="https://forms.gle/JELHgY6ttFEUQQ8q9">問題を報告</a>
         <a href="">ステータス</a>
         <a href="">ATRS について</a>
       </StyledRightBox>

@@ -7,12 +7,12 @@ const StyledLoginContainer = styled.div`
   height: 100vh;
   width: 100vw;
   align-items: center;
-  background-color: #efefef;
+  background-color: var(--pale-background-color);
   display: flex;
   flex-direction: column;
   gap: 15px;
+  padding: 0 18px;
   justify-content: center;
-  padding: 0 40px;
   position: relative;
 `;
 
@@ -26,21 +26,24 @@ const StyledForm = styled.form`
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 25px;
+  gap: 22px;
   justify-content: center;
   padding: 30px 25px;
   position: relative;
   width: 100%;
+  margin: 0 auto;
+  max-width: 400px;
 
   & h2 {
     align-self: stretch;
     color: #000;
     font-size: 1.2rem;
     position: relative;
+    margin: 10px 0 0;
   }
 
   & a {
-    color: #2e54fd;
+    color: var(--link-color);
     position: relative;
     white-space: nowrap;
     width: fit-content;
@@ -82,12 +85,13 @@ const StyledInput = styled.div`
     height: 28px;
     position: relative;
     width: 100%;
+    padding: 0 12px;
   }
-`; // あとで
+`;
 
 const StyledLoginButton = styled.button`
   align-items: center;
-  background-color: #87cefa;
+  background-color: var(--button-default-color);
   border: 0;
   border-radius: 26px;
   display: inline-flex;
@@ -115,34 +119,32 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="wrapper" style={{ backgroundColor: "#efefef" }}>
-      <StyledLoginContainer>
-        <StyledForm onSubmit={handleSubmit(onSubmit)}>
-          <h2>ATRS アトラス ログイン画面</h2>
-          <StyledInputBox>
-            <StyledInput>
-              <label htmlFor="loginId_register">ログインID</label>
-              <input
-                id="loginId_register"
-                type="text"
-                {...register("loginId", { required: true })}
-              />
-              <p> {errors.loginId && "文字が入力されていません"}</p>
-            </StyledInput>
-            <StyledInput>
-              <label htmlFor="password_register">パスワード</label>
-              <input
-                id="password_register"
-                type="password"
-                {...register("password", { required: true })}
-              />
-              <p> {errors.password && "文字が入力されていません"}</p>
-            </StyledInput>
-          </StyledInputBox>
-          <StyledLoginButton type="submit">ログイン</StyledLoginButton>
-          <a href="">パスワードをお忘れの方</a>
-        </StyledForm>
-      </StyledLoginContainer>
-    </div>
+    <StyledLoginContainer>
+      <StyledForm onSubmit={handleSubmit(onSubmit)}>
+        <h2>ATRS アトラス ログイン画面</h2>
+        <StyledInputBox>
+          <StyledInput>
+            <label htmlFor="loginId_register">ログインID</label>
+            <input
+              id="loginId_register"
+              type="text"
+              {...register("loginId", { required: true })}
+            />
+            <p> {errors.loginId && "文字が入力されていません"}</p>
+          </StyledInput>
+          <StyledInput>
+            <label htmlFor="password_register">パスワード</label>
+            <input
+              id="password_register"
+              type="password"
+              {...register("password", { required: true })}
+            />
+            <p> {errors.password && "文字が入力されていません"}</p>
+          </StyledInput>
+        </StyledInputBox>
+        <StyledLoginButton type="submit">ログイン</StyledLoginButton>
+        <a href="">パスワードをお忘れの方</a>
+      </StyledForm>
+    </StyledLoginContainer>
   );
 };

@@ -4,13 +4,13 @@ import DashboardMain from "../features/Dashboard/DashboardMain";
 
 function Dashboard() {
   return (
-    <div className="wrapper">
+    <>
       <Header />
       <main>
         <DashboardMain />
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

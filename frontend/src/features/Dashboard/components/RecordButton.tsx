@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from "../../../components/atoms/Button";
+import Button from "../../../components/parts/Button";
 
 const StyledStatus = styled.div`
   align-items: center;
@@ -16,7 +16,7 @@ const StyledStatus = styled.div`
 
 const StyledStatusIcon = styled.div`
   align-items: center;
-  background-color: #87cefa;
+  background-color: var(--attend-color);
   border-radius: 80px;
   display: inline-flex;
   gap: 10px;
@@ -48,7 +48,7 @@ function RecordButton({ isAttend, postActivityButton }: RecordButtonProps) {
           <Button
             text="退席を記録"
             onClick={async () => await postActivityButton()}
-            color="#f3bca0"
+            color="var(--leave-color)"
             textStyle={{ fontSize: "1.6rem", color: "#000" }}
             className="leaveButton"
           />
@@ -57,7 +57,7 @@ function RecordButton({ isAttend, postActivityButton }: RecordButtonProps) {
         <Button
           text="出席を記録"
           onClick={async () => await postActivityButton()}
-          color="#cad1f7"
+          color="var(--attend-color)"
           textStyle={{ fontSize: "1.6rem", color: "#000" }}
         />
       )}

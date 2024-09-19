@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import TodaysActivity from "../../../components/parts/TodaysActivity";
-import WeeklyActivity from "../../../components/parts/WeeklyActivity";
+import TodaysActivity from "../../../components/layout/TodaysActivity";
+import WeeklyActivity from "../../../components/layout/WeeklyActivity";
 
 const StyledCards = styled.div`
   align-items: flex-start;

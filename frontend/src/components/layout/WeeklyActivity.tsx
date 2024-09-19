@@ -1,4 +1,4 @@
-import TimeBox from "../atoms/TimeBox";
+import TimeBox from "../parts/TimeBox";
 
 import StyledCards from "../style/StyledCards";
 
