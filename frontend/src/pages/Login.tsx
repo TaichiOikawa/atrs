@@ -101,7 +101,7 @@ const StyledLoginButton = styled.button`
   padding: 8px 23px;
   position: relative;
   font-size: 1.2rem;
-  color: #000;
+  color: #fff;
   white-space: nowrap;
 `;
 

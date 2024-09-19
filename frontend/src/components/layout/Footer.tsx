@@ -32,7 +32,7 @@ const StyledRightBox = styled.div`
   flex-direction: column;
   gap: 5px;
   justify-content: center;
-  padding: 3px 10px;
+  padding: 5px 10px;
   position: relative;
 
   & a {
