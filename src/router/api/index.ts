@@ -55,7 +55,7 @@ apiRouter.get("/activity", async (req, res) => {
     .getRawOne();
 
   const activity = {
-    attendTime: activityInDb?.attendTime,
+    attendTime: activityInDb?.attendTime || "",
     leaveTime: activityInDb?.leaveTime || "",
     activityTime: activityInDb?.activityTime || "",
     weeklyTime: weeklyTime?.weeklyTime || "",

@@ -13,7 +13,7 @@ export const login = async (data: User) => {
 };
 
 export const signUp = async (data: User) => {
-  await axios.post(`/auth/sign-up`, data);
+  await axios.post(`/auth/signup`, data);
   return;
 };
 

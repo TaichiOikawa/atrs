@@ -24,7 +24,7 @@ export const SignUpPage = () => {
           {...register("name", { required: true })}
         />
         <p> {errors.name && "文字が入力されていません"}</p>
-        <label htmlFor="loginId_register">Eメール</label>
+        <label htmlFor="loginId_register">ログインID</label>
         <input
           id="loginId_register"
           type="text"
