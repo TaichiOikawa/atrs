@@ -5,7 +5,7 @@ import { User } from "../entity/User";
 
 require("dotenv").config();
 
-const jweSecret: string = process.env.JWT_SECRET || "secret";
+const jweSecret: string = process.env.JWT_SECRET as string;
 const userRepository = AppDataSource.getRepository(User);
 
 export type jwtPayloadType = {
