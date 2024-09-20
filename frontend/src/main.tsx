@@ -1,3 +1,4 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -17,11 +18,13 @@ axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers.post["Access-Control-Allow-Credentials"] = "true";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ErrorBoundary>
-    <StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </StrictMode>
-  </ErrorBoundary>
+  <StrictMode>
+    <ErrorBoundary>
+      <ChakraProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ChakraProvider>
+    </ErrorBoundary>
+  </StrictMode>
 );

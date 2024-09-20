@@ -49,7 +49,7 @@ function RecordButton({ isAttend, postActivityButton }: RecordButtonProps) {
             text="退席を記録"
             onClick={async () => await postActivityButton()}
             color="var(--leave-color)"
-            textStyle={{ fontSize: "1.6rem", color: "#000" }}
+            textStyle={{ fontSize: "1.5rem", color: "#000" }}
             className="leaveButton"
           />
         </StyledStatus>
@@ -58,7 +58,7 @@ function RecordButton({ isAttend, postActivityButton }: RecordButtonProps) {
           text="出席を記録"
           onClick={async () => await postActivityButton()}
           color="var(--attend-color)"
-          textStyle={{ fontSize: "1.6rem", color: "#000" }}
+          textStyle={{ fontSize: "1.5rem", color: "#000" }}
         />
       )}
     </>

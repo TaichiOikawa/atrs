@@ -1,5 +1,20 @@
 import axios from "axios";
 
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.error(error);
+    const status = error.response?.status;
+    if (status && status.toString().startsWith("4")) {
+      // Client error
+      return error.response;
+    }
+    return Promise.reject(error.response);
+  }
+);
+
 export type User = {
   id?: number;
   name?: string;
@@ -8,8 +23,8 @@ export type User = {
 };
 
 export const login = async (data: User) => {
-  await axios.post(`/auth/login`, data);
-  return;
+  const res = await axios.post(`/auth/login`, data);
+  return res;
 };
 
 export const signUp = async (data: User) => {

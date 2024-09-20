@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
@@ -5,14 +6,16 @@ import {
   getActivityStatus,
   postActivity,
 } from "../../api/activity";
+import MemberStatusButton from "../../components/layout/MembersStatusOverview";
 import Cards from "./components/Cards";
 import RecordButton from "./components/RecordButton";
 
-const MainContainer = styled.div`
+const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
   gap: 11px;
+  margin: 0 0 25px;
   padding: 0 30px;
   position: relative;
 
@@ -21,7 +24,7 @@ const MainContainer = styled.div`
   }
 `;
 
-const Organization = styled.div`
+const Title = styled.div`
   align-items: center;
   align-self: stretch;
   display: flex;
@@ -29,11 +32,6 @@ const Organization = styled.div`
   gap: 10px;
   position: relative;
   width: 100%;
-
-  & h2 {
-    font-size: 2rem;
-    margin: 0;
-  }
 `;
 
 type Activity = {
@@ -46,6 +44,7 @@ type Activity = {
 
 function DashboardMain() {
   const organization = "Organization Name";
+  const toast = useToast();
   const [isAttend, setIsAttend] = useState<boolean>(false);
   const [Activity, setActivity] = useState<Activity>({
     attendTime: "",
@@ -71,25 +70,52 @@ function DashboardMain() {
   }, []);
 
   const postActivityButton = async () => {
-    await postActivity();
+    try {
+      await postActivity();
+    } catch (error) {
+      console.error(`[postActivityButton] error:`, error);
+      toast({
+        title: "エラーが発生しました",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     const updatedActivity = await getActivity();
     setActivity(updatedActivity);
     const updatedIsAttend = await getActivityStatus();
     setIsAttend(updatedIsAttend);
+    if (updatedIsAttend) {
+      toast({
+        title: "出席を記録しました",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "退席を記録しました",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
     console.log(`[postActivityButton] updatedActivity:`, updatedActivity);
   };
 
   return (
-    <MainContainer>
-      <Organization>
+    <Container>
+      <Title>
         <h2>{organization}</h2>
-      </Organization>
+      </Title>
       <RecordButton
         isAttend={isAttend}
         postActivityButton={postActivityButton}
       />
       <Cards activity={Activity} />
-    </MainContainer>
+      <MemberStatusButton online={5} total={10} />
+    </Container>
   );
 }
 

@@ -14,11 +14,6 @@ const StyledTimeBox = styled.div`
   position: relative;
   width: 100%;
 
-  & h4 {
-    font-size: 1.4rem;
-    margin: 0;
-  }
-
   & .time {
     align-items: flex-start;
     align-self: stretch;
@@ -32,7 +27,7 @@ const StyledTimeBox = styled.div`
   }
 
   & p {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     margin: 2px 0;
   }
 `;

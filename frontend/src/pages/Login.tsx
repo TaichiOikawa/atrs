@@ -1,3 +1,15 @@
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
+import { useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -16,7 +28,7 @@ const StyledLoginContainer = styled.div`
   position: relative;
 `;
 
-const StyledForm = styled.form`
+const StyledForm = styled.div`
   align-items: center;
   align-self: stretch;
   background-color: #fff;
@@ -33,6 +45,18 @@ const StyledForm = styled.form`
   width: 100%;
   margin: 0 auto;
   max-width: 400px;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+
+  & form {
+    align-items: center;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
 
   & h2 {
     align-self: stretch;
@@ -92,7 +116,6 @@ const StyledInput = styled.div`
 const StyledLoginButton = styled.button`
   align-items: center;
   background-color: var(--button-default-color);
-  border: 0;
   border-radius: 26px;
   display: inline-flex;
   flex: 0 0 auto;
@@ -105,45 +128,126 @@ const StyledLoginButton = styled.button`
   white-space: nowrap;
 `;
 
+const StyledLinkButton = styled.button`
+  background: none;
+  border: none;
+  box-shadow: none !important;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 export const LoginPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<User>();
+  const { handleSubmit, register } = useForm<User>();
   const navigate = useNavigate();
+  const toast = useToast();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef<HTMLButtonElement | null>(null);
 
   const onSubmit: SubmitHandler<User> = async (data) => {
-    await login(data);
+    if (!data.loginId) {
+      toast({
+        title: "ログインIDを入力してください",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    if (!data.password) {
+      toast({
+        title: "パスワードを入力してください",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    const res = await login(data);
+    if (res.status === 401) {
+      toast({
+        title: "ログインIDまたはパスワードが間違っています",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    } else if (res.status !== 200) {
+      toast({
+        title: "ログインに失敗しました (サーバーエラー)",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
     navigate("/dashboard");
+    toast({
+      title: `ログインしました`,
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   return (
     <StyledLoginContainer>
-      <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      <StyledForm>
         <h2>ATRS アトラス ログイン画面</h2>
-        <StyledInputBox>
-          <StyledInput>
-            <label htmlFor="loginId_register">ログインID</label>
-            <input
-              id="loginId_register"
-              type="text"
-              {...register("loginId", { required: true })}
-            />
-            <p> {errors.loginId && "文字が入力されていません"}</p>
-          </StyledInput>
-          <StyledInput>
-            <label htmlFor="password_register">パスワード</label>
-            <input
-              id="password_register"
-              type="password"
-              {...register("password", { required: true })}
-            />
-            <p> {errors.password && "文字が入力されていません"}</p>
-          </StyledInput>
-        </StyledInputBox>
-        <StyledLoginButton type="submit">ログイン</StyledLoginButton>
-        <a href="">パスワードをお忘れの方</a>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <StyledInputBox>
+            <StyledInput>
+              <label htmlFor="loginId_register">ログインID</label>
+              <input
+                id="loginId_register"
+                type="number"
+                placeholder="Login ID"
+                {...register("loginId")}
+              />
+            </StyledInput>
+            <StyledInput>
+              <label htmlFor="password_register">パスワード</label>
+              <input
+                id="password_register"
+                type="password"
+                placeholder="Password"
+                {...register("password")}
+              />
+            </StyledInput>
+          </StyledInputBox>
+          <StyledLoginButton type="submit">ログイン</StyledLoginButton>
+        </form>
+        <StyledLinkButton onClick={onOpen}>
+          パスワードをお忘れの方
+        </StyledLinkButton>
+
+        <AlertDialog
+          isOpen={isOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader>パスワードをお忘れの方</AlertDialogHeader>
+
+              <AlertDialogBody>
+                お手数ですが、管理者にお問い合わせください。
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose}>
+                  Close
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
       </StyledForm>
     </StyledLoginContainer>
   );

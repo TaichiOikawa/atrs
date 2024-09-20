@@ -24,15 +24,14 @@ const Container = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 4rem;
+  font-size: 4rem !important;
   text-align: center;
   color: var(--logo-font-color);
-  margin: 20px 0;
+  margin: 20px 0 !important;
 `;
 
 const LoginButton = styled.button`
   background-color: var(--button-default-color);
-  border: none;
   border-radius: 12px;
   color: #fff;
   font-size: 1.4rem;

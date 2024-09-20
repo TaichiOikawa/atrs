@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { logout } from "../../api/auth";
@@ -6,20 +7,14 @@ const StyledHeader = styled.header`
   align-items: center;
   background-color: var(--background-color);
   display: flex;
-  height: 87px;
   justify-content: space-between;
-  padding: 20px;
+  padding: 5px 30px;
 
   & .logo {
     display: flex;
     align-items: center;
     flex-direction: column;
     color: var(--logo-font-color);
-    & h1 {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: bold;
-    }
     & p {
       margin-top: -6px;
       font-size: 1rem;
@@ -51,20 +46,26 @@ const UserInfo = styled.div`
 
 const LogoutButton = styled.button`
   background-color: var(--button-default-color);
-  border: none;
   border-radius: 5px;
   color: #fff;
   font-size: 0.85rem;
-  margin: 0 10px;
+  margin-left: 10px;
   padding: 10px 15px;
   cursor: pointer;
 `;
 
 function Header() {
   const navigate = useNavigate();
+  const toast = useToast();
   const handleLogout = async () => {
     await logout();
     navigate("/");
+    toast({
+      title: "ログアウトしました",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   const userName: string = sessionStorage.getItem("name") || "Guest";

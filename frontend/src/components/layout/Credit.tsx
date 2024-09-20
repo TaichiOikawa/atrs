@@ -5,7 +5,7 @@ const StyledCredit = styled.div`
   position: relative;
 
   & p {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     position: relative;
     white-space: nowrap;
     width: fit-content;
@@ -24,7 +24,7 @@ function Credit({ className }: { className?: string }) {
       <p>ver. 0.0.0 (Develop)</p>
       <p>ATRS © 2024 TaichiOikawa</p>
 
-      <a href="https://github.com/TaichiOikawa/atrs-frontend">
+      <a href="https://github.com/TaichiOikawa/atrs">
         <img className="github-icon" src="/github.svg" alt="Github Link" />
       </a>
     </StyledCredit>

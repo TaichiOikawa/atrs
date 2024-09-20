@@ -16,9 +16,6 @@ const StyledToday = styled.div`
   & h4 {
     align-self: stretch;
     position: relative;
-    margin-top: -1px;
-    font-size: 1.4rem;
-    margin: 0;
   }
 `;
 

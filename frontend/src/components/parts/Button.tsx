@@ -3,7 +3,6 @@ import styled from "styled-components";
 const StyledButton = styled.button`
   align-items: center;
   border-radius: 12px;
-  border: none;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
