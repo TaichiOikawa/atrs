@@ -1,6 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Absent } from "./Absent";
 import { Activity } from "./Activity";
+import { Organization } from "./Organization";
 
 @Entity()
 export class User {
@@ -18,6 +25,12 @@ export class User {
 
   @Column({ type: "varchar", length: 20 })
   permission: "admin" | "moderator" | "user";
+
+  @ManyToOne(() => Organization, (organization) => organization.users, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
+  organization: Organization;
 
   @OneToMany(() => Activity, (activity) => activity.user)
   activities: Activity[];

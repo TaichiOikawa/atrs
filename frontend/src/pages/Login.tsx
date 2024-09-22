@@ -1,15 +1,6 @@
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
-import { useRef } from "react";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -143,56 +134,50 @@ const StyledLinkButton = styled.button`
 `;
 
 export const LoginPage = () => {
-  const { handleSubmit, register } = useForm<User>();
+  const { handleSubmit, register, reset } = useForm<User>();
   const navigate = useNavigate();
-  const toast = useToast();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = useRef<HTMLButtonElement | null>(null);
+  const [opened, { open, close }] = useDisclosure();
 
   const onSubmit: SubmitHandler<User> = async (data) => {
     if (!data.loginId) {
-      toast({
-        title: "ログインIDを入力してください",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+      notifications.show({
+        title: "ログインに失敗しました",
+        message: "ログインIDを入力してください",
+        color: "red",
       });
       return;
     }
     if (!data.password) {
-      toast({
-        title: "パスワードを入力してください",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+      notifications.show({
+        title: "ログインに失敗しました",
+        message: "パスワードを入力してください",
+        color: "red",
       });
       return;
     }
     const res = await login(data);
     if (res.status === 401) {
-      toast({
-        title: "ログインIDまたはパスワードが間違っています",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+      notifications.show({
+        title: "ログインに失敗しました",
+        message: "ログインIDまたはパスワードが違います",
+        color: "red",
       });
+      reset({ password: "" });
       return;
     } else if (res.status !== 200) {
-      toast({
-        title: "ログインに失敗しました (サーバーエラー)",
+      notifications.show({
+        title: `ログインに失敗しました (Code: ${res.status})`,
+        message: "もう一度お試しください",
         status: "error",
-        duration: 3000,
-        isClosable: true,
       });
+      reset({ password: "" });
       return;
     }
     navigate("/dashboard");
-    toast({
-      title: `ログインしました`,
+    notifications.show({
+      message: "ログインしました！",
       status: "success",
-      duration: 3000,
-      isClosable: true,
     });
   };
 
@@ -223,31 +208,12 @@ export const LoginPage = () => {
           </StyledInputBox>
           <StyledLoginButton type="submit">ログイン</StyledLoginButton>
         </form>
-        <StyledLinkButton onClick={onOpen}>
+        <StyledLinkButton onClick={open}>
           パスワードをお忘れの方
         </StyledLinkButton>
-
-        <AlertDialog
-          isOpen={isOpen}
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader>パスワードをお忘れの方</AlertDialogHeader>
-
-              <AlertDialogBody>
-                お手数ですが、管理者にお問い合わせください。
-              </AlertDialogBody>
-
-              <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onClose}>
-                  Close
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
+        <Modal opened={opened} onClose={close} title="パスワードをお忘れの方">
+          <p>管理者にお問い合わせください。</p>
+        </Modal>
       </StyledForm>
     </StyledLoginContainer>
   );

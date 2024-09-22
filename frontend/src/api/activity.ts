@@ -53,3 +53,9 @@ export const postActivity = async () => {
   const res = await axios.post(`/api/activity`);
   return res.data;
 };
+
+export const organizationStatus = async (req: { organizationId: string }) => {
+  console.log("GET /api/organization/:organizationId/status");
+  const res = await axios.get(`/api/organization/${req.organizationId}/status`);
+  return res.data;
+};

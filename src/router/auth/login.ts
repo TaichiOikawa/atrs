@@ -20,6 +20,7 @@ loginRouter.post("/", async (req, res, next) => {
 
     const userInDb = await userRepository.findOne({
       where: { login_id: user.loginId },
+      relations: ["organization"],
     });
 
     if (!userInDb) {
@@ -33,6 +34,7 @@ loginRouter.post("/", async (req, res, next) => {
         user_id: userInDb.user_id,
         login_id: userInDb.login_id,
         permission: userInDb.permission,
+        organization_id: userInDb.organization?.organization_id,
       };
       const jwtToken = jwtHelper.createToken(payload);
       res
@@ -46,7 +48,7 @@ loginRouter.post("/", async (req, res, next) => {
     }
   } catch (err) {
     if (err instanceof Error) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 });

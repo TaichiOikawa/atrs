@@ -1,4 +1,4 @@
-import { useToast } from "@chakra-ui/react";
+import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { logout } from "../../api/auth";
@@ -56,15 +56,13 @@ const LogoutButton = styled.button`
 
 function Header() {
   const navigate = useNavigate();
-  const toast = useToast();
+
   const handleLogout = async () => {
     await logout();
     navigate("/");
-    toast({
-      title: "ログアウトしました",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
+    notifications.show({
+      message: "ログアウトしました",
+      color: "blue",
     });
   };
 

@@ -12,6 +12,7 @@ export type jwtPayloadType = {
   user_id: number;
   login_id: string;
   permission: string;
+  organization_id: string;
 };
 
 export class jwtHelper {
@@ -31,7 +32,7 @@ export class jwtHelper {
     } catch (err: unknown) {
       // invalid signatureは無視
       if (err instanceof jwt.JsonWebTokenError) return null;
-      console.log(err);
+      console.error(err);
     }
   }
 
@@ -51,6 +52,7 @@ export class jwtHelper {
     const { user_id, login_id } = decoded as jwtPayloadType;
     const userInDb = await userRepository.findOne({
       where: { user_id: user_id },
+      relations: ["organization"],
     });
 
     if (userInDb && userInDb.login_id === login_id) {
@@ -58,6 +60,7 @@ export class jwtHelper {
         user_id,
         login_id,
         permission: userInDb.permission,
+        organization_id: userInDb.organization.organization_id,
       });
       res.cookie("jwtToken", token, {
         httpOnly: true,

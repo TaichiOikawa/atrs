@@ -2,9 +2,11 @@ import Router from "express-promise-router";
 import { IsNull, Raw } from "typeorm";
 import { AppDataSource } from "../../../data-source";
 import { Activity } from "../../entity/Activity";
+import { User } from "../../entity/User";
 
 const apiRouter = Router();
 const ActivityRepository = AppDataSource.getRepository(Activity);
+const userRepository = AppDataSource.getRepository(User);
 
 const timeDiff = (start: Date, end: Date) => {
   let diff = end.getTime() - start.getTime();
@@ -17,6 +19,7 @@ const timeDiff = (start: Date, end: Date) => {
 };
 
 apiRouter.get("/", (req, res) => {
+  console.log("GET /api");
   res.send("API root");
 });
 
@@ -119,5 +122,32 @@ apiRouter.get("/activity/status", async (req, res) => {
       res.send("attend");
     }
   }
+});
+
+apiRouter.get("/organization/:organization_id/status", async (req, res) => {
+  console.log(`GET /api/organization/${req.params.organization_id}/status`);
+
+  const organizationId = req.params.organization_id;
+  const users = await userRepository.count({
+    where: {
+      organization: {
+        organization_id: organizationId,
+      },
+    },
+  });
+
+  const activeUsers = await ActivityRepository.createQueryBuilder("activity")
+    .innerJoinAndSelect("activity.user", "user")
+    .innerJoinAndSelect("user.organization", "organization")
+    .where("activity.leaveTime IS NULL")
+    .andWhere("organization.organization_id = :organizationId", {
+      organizationId,
+    })
+    .getCount();
+
+  res.send({
+    numberOfUsers: users,
+    numberOfActive: activeUsers,
+  });
 });
 export default apiRouter;

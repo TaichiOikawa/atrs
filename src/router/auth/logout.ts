@@ -8,7 +8,7 @@ logoutRouter.post("/", async (req, res, next) => {
     res.status(200).clearCookie("jwtToken").send("Logout successful");
   } catch (err) {
     if (err instanceof Error) {
-      console.error(err.message);
+      console.error(err);
     }
   }
 });

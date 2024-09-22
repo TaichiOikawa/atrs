@@ -8,37 +8,32 @@ import { SignUpPage } from "./pages/SignUp";
 
 function App() {
   return (
-    <>
-      <Routes>
-        <Route
-          path="/"
-          element={<GuestRoute children={<Home />}></GuestRoute>}
-        />
-        <Route
-          path="/login"
-          element={
-            <CheckRoute
-              children={<LoginPage />}
-              authedNavigate="/dashboard"
-            ></CheckRoute>
-          }
-        />
-        <Route
-          path="/sign-up"
-          element={
-            <CheckRoute
-              children={<SignUpPage />}
-              authedNavigate="/dashboard"
-            ></CheckRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={<PrivateRoute children={<Dashboard />}></PrivateRoute>}
-        />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<GuestRoute children={<Home />}></GuestRoute>} />
+      <Route
+        path="/login"
+        element={
+          <CheckRoute
+            children={<LoginPage />}
+            authedNavigate="/dashboard"
+          ></CheckRoute>
+        }
+      />
+      <Route
+        path="/sign-up"
+        element={
+          <CheckRoute
+            children={<SignUpPage />}
+            authedNavigate="/dashboard"
+          ></CheckRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={<PrivateRoute children={<Dashboard />}></PrivateRoute>}
+      />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
 

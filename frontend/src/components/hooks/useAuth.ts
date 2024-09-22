@@ -6,6 +6,10 @@ type userInfoType = {
   login_id: string;
   name: string;
   permission: string;
+  organization: {
+    organization_id: string;
+    name: string;
+  };
 };
 
 export const useAuth = () => {
@@ -24,11 +28,21 @@ export const useAuth = () => {
           sessionStorage.setItem("loginId", login_id);
           sessionStorage.setItem("name", name);
           sessionStorage.setItem("permission", permission);
+          sessionStorage.setItem(
+            "organizationId",
+            userInfo.organization?.organization_id
+          );
+          sessionStorage.setItem(
+            "organizationName",
+            userInfo.organization?.name
+          );
         } else {
           sessionStorage.removeItem("userId");
           sessionStorage.removeItem("loginId");
           sessionStorage.removeItem("name");
           sessionStorage.removeItem("permission");
+          sessionStorage.removeItem("organizationId");
+          sessionStorage.removeItem("organizationName");
         }
         setCheck({
           checked: true,
