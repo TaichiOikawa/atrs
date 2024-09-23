@@ -39,6 +39,23 @@ export const logout = async () => {
 };
 
 export const checkJwt = async () => {
-  const response = axios.get(`/auth/verify`);
-  return response;
+  const res = axios.get(`/auth/verify`);
+  return res;
+};
+
+type SignupType = {
+  loginId: string;
+  name?: string;
+  password?: string;
+  organizationId?: string;
+};
+
+export const signup = async (data: SignupType) => {
+  const res = await axios.post("/auth/signup", data);
+  return res;
+};
+
+export const signupUnregistered = async (data: SignupType) => {
+  const res = await axios.post("/auth/signup/unregistered", data);
+  return res;
 };

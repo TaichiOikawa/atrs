@@ -85,7 +85,9 @@ function Header() {
           <p className="userName">{userName}</p>
           <p>Login ID: {LoginId}</p>
         </UserInfo>
-        <LogoutButton onClick={() => handleLogout()}>ログアウト</LogoutButton>
+        <LogoutButton className="button-hover" onClick={() => handleLogout()}>
+          ログアウト
+        </LogoutButton>
       </UserBox>
     </StyledHeader>
   );

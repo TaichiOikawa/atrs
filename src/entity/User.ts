@@ -3,11 +3,20 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Absent } from "./Absent";
 import { Activity } from "./Activity";
 import { Organization } from "./Organization";
+import { Status } from "./Status";
+
+export enum PermissionEnum {
+  ADMIN = "admin",
+  MODERATOR = "moderator",
+  USER = "user",
+  UNREGISTERED = "unregistered",
+}
 
 @Entity()
 export class User {
@@ -20,11 +29,15 @@ export class User {
   @Column({ type: "varchar", length: 50 })
   name: string;
 
-  @Column({ type: "varchar", length: 128 })
+  @Column({ type: "varchar", length: 128, nullable: true })
   password: string;
 
-  @Column({ type: "varchar", length: 20 })
-  permission: "admin" | "moderator" | "user";
+  @Column({
+    type: "enum",
+    enum: PermissionEnum,
+    default: PermissionEnum.UNREGISTERED,
+  })
+  permission: PermissionEnum;
 
   @ManyToOne(() => Organization, (organization) => organization.users, {
     onDelete: "CASCADE",
@@ -37,4 +50,7 @@ export class User {
 
   @OneToMany(() => Absent, (absent) => absent.author)
   absents: Absent[];
+
+  @OneToOne(() => Status, (status) => status.user, { cascade: true })
+  status: Status;
 }

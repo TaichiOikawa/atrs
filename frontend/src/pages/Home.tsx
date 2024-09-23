@@ -49,6 +49,7 @@ function Home() {
           onClick={() => {
             window.location.href = "/login";
           }}
+          className="button-hover"
         >
           ログイン
         </LoginButton>

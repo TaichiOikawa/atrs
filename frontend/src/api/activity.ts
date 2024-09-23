@@ -1,4 +1,5 @@
 import axios from "axios";
+import { organizationStatusType } from "../types/status";
 
 const datetime = new Intl.DateTimeFormat(undefined, {
   year: "numeric",
@@ -57,5 +58,5 @@ export const postActivity = async () => {
 export const organizationStatus = async (req: { organizationId: string }) => {
   console.log("GET /api/organization/:organizationId/status");
   const res = await axios.get(`/api/organization/${req.organizationId}/status`);
-  return res.data;
+  return res.data as organizationStatusType;
 };

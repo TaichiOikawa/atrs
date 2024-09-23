@@ -6,7 +6,7 @@ export class Activity {
   @PrimaryGeneratedColumn()
   activity_id: number;
 
-  @ManyToOne(() => User, (user) => user.activities, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.activities, { cascade: true })
   user: User;
 
   @Column({ type: "datetime" })

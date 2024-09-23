@@ -1,7 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import ms from "ms";
 import { AppDataSource } from "../../data-source";
-import { User } from "../entity/User";
+import { PermissionEnum, User } from "../entity/User";
 
 require("dotenv").config();
 
@@ -11,7 +11,7 @@ const userRepository = AppDataSource.getRepository(User);
 export type jwtPayloadType = {
   user_id: number;
   login_id: string;
-  permission: string;
+  permission: PermissionEnum;
   organization_id: string;
 };
 
@@ -66,7 +66,7 @@ export class jwtHelper {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        expires: new Date(Date.now() + ms("2d")), // cookie expires
+        expires: new Date(Date.now() + ms("4d")), // cookie expires
       });
 
       res.locals.isAuthenticated = true;

@@ -2,7 +2,7 @@ import * as bcrypt from "bcrypt";
 import * as express from "express";
 import ms from "ms";
 import { AppDataSource } from "../../../data-source";
-import { User } from "../../entity/User";
+import { PermissionEnum, User } from "../../entity/User";
 import { jwtHelper, jwtPayloadType } from "../../modules/jwtHelper";
 
 const loginRouter: express.Router = express.Router();
@@ -28,6 +28,11 @@ loginRouter.post("/", async (req, res, next) => {
       return;
     }
 
+    if (userInDb.permission === PermissionEnum.UNREGISTERED) {
+      res.status(401).send("User is not registered");
+      return;
+    }
+
     const match = await bcrypt.compare(user.password, userInDb.password);
     if (match) {
       const payload: jwtPayloadType = {
@@ -40,7 +45,7 @@ loginRouter.post("/", async (req, res, next) => {
       res
         .cookie("jwtToken", jwtToken, {
           httpOnly: true,
-          expires: new Date(Date.now() + ms("2d")),
+          expires: new Date(Date.now() + ms("4d")),
         })
         .send("Login successful");
     } else {

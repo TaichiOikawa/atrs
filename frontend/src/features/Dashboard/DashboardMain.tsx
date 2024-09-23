@@ -9,7 +9,8 @@ import {
   organizationStatus,
   postActivity,
 } from "../../api/activity";
-import MemberStatusButton from "../../components/layout/MembersStatusOverview";
+import MemberStatusButton from "../../components/layout/MembersStatusButton";
+import { organizationStatusType } from "../../types/status";
 import Cards from "./components/Cards";
 import RecordButton from "./components/RecordButton";
 
@@ -56,10 +57,8 @@ function DashboardMain() {
     weeklyTime: "",
     totalTime: "",
   });
-  const [everyoneStatus, setEveryoneStatus] = useState({
-    numberOfUsers: 0,
-    numberOfActive: 0,
-  });
+  const [memberStatus, setMemberStatus] =
+    useState<organizationStatusType>(null);
   const xIcon = <IconX size={rem(20)} />;
 
   console.log("DashboardMainが再描画されました");
@@ -80,9 +79,12 @@ function DashboardMain() {
   useEffect(() => {
     (async () => {
       // 組織の状態を取得
-      const organizationId = sessionStorage.getItem("organizationId") || "";
-      const status = await organizationStatus({ organizationId });
-      setEveryoneStatus(status);
+      const organizationId = sessionStorage.getItem("organizationId");
+      if (!organizationId) {
+        return;
+      }
+      const res = await organizationStatus({ organizationId });
+      setMemberStatus(res);
     })();
   }, [isAttend]);
 
@@ -127,10 +129,7 @@ function DashboardMain() {
         postActivityButton={postActivityButton}
       />
       <Cards activity={Activity} />
-      <MemberStatusButton
-        online={everyoneStatus.numberOfActive}
-        total={everyoneStatus.numberOfUsers}
-      />
+      <MemberStatusButton status={memberStatus} />
     </Container>
   );
 }

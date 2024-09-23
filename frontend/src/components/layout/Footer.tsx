@@ -1,3 +1,4 @@
+import { HoverCard, Text } from "@mantine/core";
 import styled from "styled-components";
 import Credit from "./Credit";
 
@@ -44,6 +45,12 @@ const StyledRightBox = styled.div`
 `;
 
 function Footer() {
+  const building = (
+    <Text size="sm" c="red">
+      工事中⛔
+    </Text>
+  );
+
   return (
     <StyledFooter>
       <StyledLeftBox>
@@ -51,8 +58,20 @@ function Footer() {
       </StyledLeftBox>
       <StyledRightBox>
         <a href="https://forms.gle/JELHgY6ttFEUQQ8q9">問題を報告</a>
-        <a href="">ステータス</a>
-        <a href="">ATRS について</a>
+        <HoverCard width="auto" shadow="md" position="top">
+          <HoverCard.Target>
+            <a href="">ステータス</a>
+          </HoverCard.Target>
+
+          <HoverCard.Dropdown>{building}</HoverCard.Dropdown>
+        </HoverCard>
+        <HoverCard width="auto" shadow="md" position="top">
+          <HoverCard.Target>
+            <a href="">ATRS について</a>
+          </HoverCard.Target>
+
+          <HoverCard.Dropdown>{building}</HoverCard.Dropdown>
+        </HoverCard>
       </StyledRightBox>
     </StyledFooter>
   );

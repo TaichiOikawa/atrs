@@ -26,7 +26,7 @@ function Button(props: ButtonProps) {
     <StyledButton
       onClick={props.onClick}
       style={{ backgroundColor: props.color }}
-      className={props.className}
+      className={props.className + " button-hover"}
     >
       <div style={props.textStyle}>{props.text}</div>
     </StyledButton>

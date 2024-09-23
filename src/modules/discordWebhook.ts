@@ -10,8 +10,8 @@ const config = {
 };
 
 type requestType = {
-  username: string | "ATRS";
-  content: string;
+  username?: string | "ATRS";
+  content?: string;
   embeds?: {
     title?: string;
     description?: string;

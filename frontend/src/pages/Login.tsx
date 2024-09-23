@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { User, login } from "../api/auth";
+import PasswordRegister from "../features/Login/components/PasswordRegister";
 
 const StyledLoginContainer = styled.div`
   height: 100vh;
@@ -119,7 +120,7 @@ const StyledLoginButton = styled.button`
   white-space: nowrap;
 `;
 
-const StyledLinkButton = styled.button`
+export const StyledLinkButton = styled.button`
   background: none;
   border: none;
   box-shadow: none !important;
@@ -131,6 +132,13 @@ const StyledLinkButton = styled.button`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const UnderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-direction: column;
 `;
 
 export const LoginPage = () => {
@@ -206,14 +214,20 @@ export const LoginPage = () => {
               />
             </StyledInput>
           </StyledInputBox>
-          <StyledLoginButton type="submit">ログイン</StyledLoginButton>
+          <StyledLoginButton type="submit" className="button-hover">
+            ログイン
+          </StyledLoginButton>
         </form>
-        <StyledLinkButton onClick={open}>
-          パスワードをお忘れの方
-        </StyledLinkButton>
-        <Modal opened={opened} onClose={close} title="パスワードをお忘れの方">
-          <p>管理者にお問い合わせください。</p>
-        </Modal>
+
+        <UnderContainer>
+          <StyledLinkButton onClick={open}>
+            パスワードをお忘れの方
+          </StyledLinkButton>
+          <Modal opened={opened} onClose={close} title="パスワードをお忘れの方">
+            <p>管理者にお問い合わせください。</p>
+          </Modal>
+          <PasswordRegister />
+        </UnderContainer>
       </StyledForm>
     </StyledLoginContainer>
   );
