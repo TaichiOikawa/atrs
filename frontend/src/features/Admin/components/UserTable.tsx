@@ -74,7 +74,7 @@ function UserTable() {
       <Flex justify="flex-end" align="center">
         <AddUser />
       </Flex>
-      <Container size="lg">
+      <Container size="lg" mt="md">
         <Table horizontalSpacing="md" verticalSpacing="sm">
           <Table.Thead>
             <Table.Tr>

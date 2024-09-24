@@ -41,6 +41,10 @@ type requestType = {
 };
 
 const postWebhook = async (req: requestType) => {
+  if (!webhookUrl) {
+    console.error("Webhook URL is not defined");
+    return;
+  }
   const res = await axios.post(webhookUrl, JSON.stringify(req), config);
   console.log(res);
 };
