@@ -79,11 +79,7 @@ function DashboardMain() {
   useEffect(() => {
     (async () => {
       // 組織の状態を取得
-      const organizationId = sessionStorage.getItem("organizationId");
-      if (!organizationId) {
-        return;
-      }
-      const res = await organizationStatus({ organizationId });
+      const res = await organizationStatus();
       setMemberStatus(res);
     })();
   }, [isAttend]);

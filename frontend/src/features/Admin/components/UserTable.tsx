@@ -8,47 +8,45 @@ import {
   Table,
 } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { getUsers } from "../../../api/users";
+import { PermissionEnum, UsersType } from "../../../types/user";
 import AddUser from "./AddUser";
 
-const data = [
-  {
-    user_id: 1,
-    login_id: "0001",
-    name: "John Doe",
-    permission: "admin",
-  },
-  {
-    user_id: 2,
-    login_id: "0002",
-    name: "John Smith",
-    permission: "moderator",
-  },
-  {
-    user_id: 3,
-    login_id: "0003",
-    name: "Sara Johnson",
-    permission: "user",
-  },
-];
-
 function UserTable() {
-  const rows = data.map((user) => (
+  const [data, setData] = useState<UsersType | null>(null);
+  useEffect(() => {
+    (async () => {
+      const res = await getUsers();
+      setData(res);
+    })();
+  }, []);
+
+  const rows = data?.map((user) => (
     <Table.Tr key={user.user_id}>
       <Table.Td>{user.user_id}</Table.Td>
       <Table.Td>{user.login_id}</Table.Td>
       <Table.Td>{user.name}</Table.Td>
       <Table.Td>
-        {user.permission === "admin" ? (
+        {user.permission === PermissionEnum.ADMIN ? (
           <Badge variant="outline" color="pink" size="lg">
             ADMIN
           </Badge>
-        ) : user.permission === "moderator" ? (
+        ) : user.permission === PermissionEnum.MODERATOR ? (
           <Badge variant="outline" color="orange" size="lg">
             MODERATOR
           </Badge>
-        ) : (
+        ) : user.permission === PermissionEnum.USER ? (
           <Badge variant="outline" color="blue" size="lg">
             USER
+          </Badge>
+        ) : user.permission === PermissionEnum.UNREGISTERED ? (
+          <Badge variant="outline" color="gray" size="lg">
+            UNREGISTERED
+          </Badge>
+        ) : (
+          <Badge variant="outline" color="gray" size="lg">
+            {user.permission}
           </Badge>
         )}
       </Table.Td>

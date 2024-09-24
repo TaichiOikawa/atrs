@@ -4,7 +4,7 @@ import { IsNull, Raw } from "typeorm";
 import { AppDataSource } from "../../../data-source";
 import { Activity } from "../../entity/Activity";
 import { Status, StatusEnum } from "../../entity/Status";
-import { User } from "../../entity/User";
+import { PermissionEnum, User } from "../../entity/User";
 import postWebhook from "../../modules/discordWebhook";
 
 const apiRouter = Router();
@@ -195,6 +195,29 @@ apiRouter.get("/activity/status", async (req, res) => {
       res.send("attend");
     }
   }
+});
+
+apiRouter.get("/organization/:organization_id/users", async (req, res) => {
+  console.log(`GET /api/organization/${req.params.organization_id}/users`);
+
+  if (res.locals.userInfo.permission !== PermissionEnum.ADMIN) {
+    res.status(403).send("Permission denied");
+    return;
+  }
+
+  const organizationId = req.params.organization_id;
+
+  const users = await userRepository.find({
+    select: ["user_id", "login_id", "name", "permission", "status"],
+    where: {
+      organization: {
+        organization_id: organizationId,
+      },
+    },
+    relations: ["status"],
+  });
+
+  res.send(users);
 });
 
 apiRouter.get("/organization/:organization_id/status", async (req, res) => {

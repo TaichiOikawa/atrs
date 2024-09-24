@@ -55,8 +55,9 @@ export const postActivity = async () => {
   return res.data;
 };
 
-export const organizationStatus = async (req: { organizationId: string }) => {
+export const organizationStatus = async () => {
   console.log("GET /api/organization/:organizationId/status");
-  const res = await axios.get(`/api/organization/${req.organizationId}/status`);
+  const organizationId = sessionStorage.getItem("organizationId");
+  const res = await axios.get(`/api/organization/${organizationId}/status`);
   return res.data as organizationStatusType;
 };
