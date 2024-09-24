@@ -21,7 +21,7 @@ const StyledCredit = styled.div`
 function Credit({ className }: { className?: string }) {
   return (
     <StyledCredit className={className}>
-      <p>ver. 0.0.0 (Develop)</p>
+      <p>ver. 1.0.0</p>
       <p>ATRS © 2024 TaichiOikawa</p>
 
       <a href="https://github.com/TaichiOikawa/atrs">
