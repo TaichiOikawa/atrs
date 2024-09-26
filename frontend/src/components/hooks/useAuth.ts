@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { checkJwt } from "../../api/auth";
+import { PermissionEnum } from "../../types/user";
 
 type userInfoType = {
   user_id: number;
@@ -16,7 +17,12 @@ export const useAuth = () => {
   const [check, setCheck] = useState<{
     checked: boolean;
     isAuthenticated: boolean;
-  }>({ checked: false, isAuthenticated: false });
+    permission: PermissionEnum;
+  }>({
+    checked: false,
+    isAuthenticated: false,
+    permission: PermissionEnum.USER,
+  });
   useEffect(() => {
     const handleCheckJwt = async () => {
       try {
@@ -47,9 +53,14 @@ export const useAuth = () => {
         setCheck({
           checked: true,
           isAuthenticated: response.data.isAuthenticated,
+          permission: response.data.userInfo.permission as PermissionEnum,
         });
       } catch (error) {
-        setCheck({ checked: true, isAuthenticated: false });
+        setCheck({
+          checked: true,
+          isAuthenticated: false,
+          permission: PermissionEnum.USER,
+        });
       }
     };
     handleCheckJwt();

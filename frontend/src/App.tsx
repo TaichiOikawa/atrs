@@ -1,11 +1,18 @@
 import { Route, Routes } from "react-router-dom";
-import { AdminRoute, CheckRoute, GuestRoute, PrivateRoute } from "./AuthRouter";
+import {
+  CheckRoute,
+  GuestRoute,
+  PermissionRoute,
+  PrivateRoute,
+} from "./AuthRouter";
 import Admin from "./pages/Admin";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import { LoginPage } from "./pages/Login";
+import Moderator from "./pages/Moderator";
 import { NotFoundPage } from "./pages/NotFound";
 import { SignUpPage } from "./pages/SignUp";
+import { PermissionEnum } from "./types/user";
 
 function App() {
   return (
@@ -27,7 +34,24 @@ function App() {
         path="/dashboard"
         element={<PrivateRoute children={<Dashboard />} />}
       />
-      <Route path="/admin" element={<AdminRoute children={<Admin />} />} />
+      <Route
+        path="/admin"
+        element={
+          <PermissionRoute
+            children={<Admin />}
+            permission={[PermissionEnum.ADMIN]}
+          />
+        }
+      />
+      <Route
+        path="/moderator"
+        element={
+          <PermissionRoute
+            children={<Moderator />}
+            permission={[PermissionEnum.ADMIN, PermissionEnum.MODERATOR]}
+          />
+        }
+      />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
