@@ -17,4 +17,7 @@ export class Activity {
 
   @Column({ type: "time", nullable: true, default: null })
   activityTime: String;
+
+  @Column({ type: "bool", default: false })
+  isAutoLeave: boolean;
 }

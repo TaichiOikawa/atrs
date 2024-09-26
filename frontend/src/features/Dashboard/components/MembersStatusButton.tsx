@@ -1,7 +1,7 @@
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import styled from "styled-components";
-import { organizationStatusType, StatusEnum } from "../../types/status";
+import { organizationStatusType, StatusEnum } from "../../../types/status";
 import MemberStatusModal from "./MemberStatusModal";
 
 const StyledMemberStatusButton = styled.button`
