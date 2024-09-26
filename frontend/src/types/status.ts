@@ -1,7 +1,7 @@
 export enum StatusEnum {
   ACTIVE = "active",
   LEAVE = "leave",
-  AUTO_LEAVE = "auto_leave",
+  NOT_ATTEND = "not_attend",
 }
 
 export type organizationStatusType =
