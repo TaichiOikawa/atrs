@@ -36,7 +36,7 @@ const UserBox = styled.div`
 
 const UserInfo = styled.div`
   .userName {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
   p {
     margin: 0 0;

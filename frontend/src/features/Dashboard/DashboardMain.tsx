@@ -6,10 +6,8 @@ import styled from "styled-components";
 import {
   getActivity,
   getActivityStatus,
-  organizationStatus,
   postActivity,
 } from "../../api/activity";
-import { organizationStatusType } from "../../types/status";
 import Cards from "./components/Cards";
 import MemberStatusButton from "./components/MembersStatusButton";
 import RecordButton from "./components/RecordButton";
@@ -57,8 +55,7 @@ function DashboardMain() {
     weeklyTime: "",
     totalTime: "",
   });
-  const [memberStatus, setMemberStatus] =
-    useState<organizationStatusType>(null);
+
   const xIcon = <IconX size={rem(20)} />;
 
   console.log("DashboardMainが再描画されました");
@@ -75,14 +72,6 @@ function DashboardMain() {
       setActivity(activity);
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      // 組織の状態を取得
-      const res = await organizationStatus();
-      setMemberStatus(res);
-    })();
-  }, [isAttend]);
 
   const postActivityButton = async () => {
     try {
@@ -125,7 +114,7 @@ function DashboardMain() {
         postActivityButton={postActivityButton}
       />
       <Cards activity={Activity} />
-      <MemberStatusButton status={memberStatus} />
+      <MemberStatusButton />
     </Container>
   );
 }

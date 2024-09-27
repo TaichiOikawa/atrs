@@ -1,6 +1,8 @@
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { organizationStatus } from "../../../api/activity";
 import { organizationStatusType, StatusEnum } from "../../../types/status";
 import MemberStatusModal from "./MemberStatusModal";
 
@@ -61,16 +63,21 @@ const StyledMemberStatusButton = styled.button`
   }
 `;
 
-type MemberStatusButtonProps = {
-  status: organizationStatusType;
-};
-
-function MemberStatusButton(props: MemberStatusButtonProps) {
+function MemberStatusButton() {
+  const [memberStatus, setMemberStatus] =
+    useState<organizationStatusType>(null);
   const [opened, { open, close }] = useDisclosure();
-  const status = {
-    numberOfUsers: props.status?.length || 0,
+  useEffect(() => {
+    (async () => {
+      const res = await organizationStatus();
+      setMemberStatus(res);
+    })();
+  }, [opened]);
+
+  const data = {
+    numberOfUsers: memberStatus?.length || 0,
     numberOfActive:
-      props.status?.filter((user) => user.status === StatusEnum.ACTIVE)
+      memberStatus?.filter((user) => user.status === StatusEnum.ACTIVE)
         .length || 0,
   };
 
@@ -84,8 +91,8 @@ function MemberStatusButton(props: MemberStatusButtonProps) {
             className="people-fill"
           />
           <div>
-            <h4>{status.numberOfActive}人オンライン</h4>
-            <p>/{status.numberOfUsers}人</p>
+            <h4>{data.numberOfActive}人オンライン</h4>
+            <p>/{data.numberOfUsers}人</p>
           </div>
         </div>
         <img
@@ -100,7 +107,7 @@ function MemberStatusButton(props: MemberStatusButtonProps) {
         size="lg"
         title="オンラインメンバー"
       >
-        <MemberStatusModal status={props.status} />
+        <MemberStatusModal status={memberStatus} />
       </Modal>
     </>
   );
