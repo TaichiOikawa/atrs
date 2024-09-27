@@ -32,12 +32,12 @@ const timeDiff = (start: Date, end: Date) => {
 };
 
 apiRouter.get("/", (req, res) => {
-  console.log("GET /api");
+  console.debug("GET /api");
   res.send("API root");
 });
 
 apiRouter.get("/activity", async (req, res) => {
-  console.log("GET /api/activity");
+  console.debug("GET /api/activity");
 
   const user = await userRepository.findOne({
     where: {
@@ -61,8 +61,6 @@ apiRouter.get("/activity", async (req, res) => {
     order: { activity_id: "DESC" },
   });
 
-  console.log(activityInDb);
-
   // 週間活動時間を取得
   let sevenDaysAgo = new Date(today);
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -76,11 +74,13 @@ apiRouter.get("/activity", async (req, res) => {
     .andWhere("activity.attendTime >= :start", {
       start: sevenDaysAgo.toISOString().slice(0, 10),
     })
+    .andWhere("activity.isAutoLeave = false")
     .getRawOne();
 
   const totalTime = await ActivityRepository.createQueryBuilder("activity")
     .select("SEC_TO_TIME(SUM(TIME_TO_SEC(activity.activityTime)))", "totalTime")
     .where("activity.user = :user", { user: res.locals.userInfo.user_id })
+    .andWhere("activity.isAutoLeave = false")
     .getRawOne();
 
   const activity = {
@@ -128,19 +128,6 @@ apiRouter.post("/activity", async (req, res) => {
       user_id: res.locals.userInfo.user_id,
       status: StatusEnum.LEAVE,
     });
-    await postWebhook({
-      embeds: [
-        {
-          title: "退席",
-          description: `**${
-            activityInDb.user.name
-          }** が退席しました\n出席時間: ${datetime.format(
-            activityInDb.attendTime
-          )}\n退席時間: ${datetime.format(activityInDb.leaveTime)}`,
-          color: 0xf1b473,
-        },
-      ],
-    });
   } else {
     // 出席記録がない場合は新規レコード
     const now = new Date();
@@ -153,23 +140,12 @@ apiRouter.post("/activity", async (req, res) => {
       user_id: res.locals.userInfo.user_id,
       status: StatusEnum.ACTIVE,
     });
-    await postWebhook({
-      embeds: [
-        {
-          title: "出席",
-          description: `**${
-            res.locals.userInfo.name
-          }** が出席しました\n出席時間: ${datetime.format(now)}`,
-          color: 0x73bef1,
-        },
-      ],
-    });
   }
   res.send("OK");
 });
 
 apiRouter.get("/activity/status", async (req, res) => {
-  console.log("GET /api/activity/status");
+  console.debug("GET /api/activity/status");
   const user = await userRepository.findOne({
     where: {
       user_id: res.locals.userInfo.user_id,
@@ -198,7 +174,7 @@ apiRouter.get("/activity/status", async (req, res) => {
 });
 
 apiRouter.get("/organization/:organization_id/users", async (req, res) => {
-  console.log(`GET /api/organization/${req.params.organization_id}/users`);
+  console.debug(`GET /api/organization/${req.params.organization_id}/users`);
 
   if (res.locals.userInfo.permission !== PermissionEnum.ADMIN) {
     res.status(403).send("Permission denied");
@@ -221,7 +197,7 @@ apiRouter.get("/organization/:organization_id/users", async (req, res) => {
 });
 
 apiRouter.get("/organization/:organization_id/status", async (req, res) => {
-  console.log(`GET /api/organization/${req.params.organization_id}/status`);
+  console.debug(`GET /api/organization/${req.params.organization_id}/status`);
 
   const organizationId = req.params.organization_id;
   const users = await userRepository.count({
@@ -248,9 +224,8 @@ apiRouter.get("/organization/:organization_id/status", async (req, res) => {
   res.send(activeUsers);
 });
 
-// 毎日0時に退席していない人のstatus, activityを更新
-schedule("00 00 * * *", async () => {
-  console.log("[Scheduled] Update status and activity");
+const AutoLeave = async () => {
+  console.log("[AUTO LEAVE] WORKING");
   const activities = await ActivityRepository.find({
     where: {
       leaveTime: IsNull(),
@@ -261,14 +236,9 @@ schedule("00 00 * * *", async () => {
     activity.leaveTime = new Date();
     let diff = timeDiff(activity.attendTime, activity.leaveTime);
     activity.activityTime = `${diff.hours}:${diff.minutes}:${diff.seconds}`;
+    activity.isAutoLeave = true;
     await ActivityRepository.save(activity);
-
-    // statusを更新
-    await statusRepository.save({
-      user_id: activity.user.user_id,
-      status: StatusEnum.AUTO_LEAVE,
-    });
-    console.log(`[Scheduled] UserID: ${activity.user.login_id}  [auto leave]`);
+    console.log(`[AUTO LEAVE] UserID: ${activity.user.login_id}  [auto leave]`);
   });
 
   const statuses = await statusRepository.find({
@@ -287,14 +257,97 @@ schedule("00 00 * * *", async () => {
       activity.leaveTime = new Date();
       let diff = timeDiff(activity.attendTime, activity.leaveTime);
       activity.activityTime = `${diff.hours}:${diff.minutes}:${diff.seconds}`;
+      activity.isAutoLeave = true;
       await ActivityRepository.save(activity);
     }
-    await statusRepository.save({
-      user_id: status.user_id,
-      status: StatusEnum.AUTO_LEAVE,
-    });
-    console.log(`[Scheduled] UserID: ${status.user.login_id}  [auto leave]`);
+    console.log(`[AUTO LEAVE] UserID: ${status.user.login_id}  [auto leave]`);
   });
+  console.log("[AUTO LEAVE] FINISHED");
+};
+
+const PostNotification = async () => {
+  console.log("[Post Notification] WORKING");
+  const activities = await ActivityRepository.find({
+    where: {
+      attendTime: Raw((alias) => `DATE(${alias}) = :today`, {
+        today: new Date().toISOString().slice(0, 10),
+      }),
+    },
+    relations: ["user"],
+  });
+
+  if (activities.length === 0) {
+    return;
+  }
+
+  const userActivityMap = new Map();
+
+  activities.forEach((activity) => {
+    const userName = activity.user.name;
+    if (!userActivityMap.has(userName)) {
+      userActivityMap.set(userName, {
+        userName: userName,
+        activities: [],
+        isAutoLeave: activity.isAutoLeave,
+      });
+    }
+
+    userActivityMap.get(userName).activities.push({
+      attendTime: datetime.format(activity.attendTime),
+      leaveTime: datetime.format(activity.leaveTime) || null,
+      activityTime: activity.activityTime || null,
+    });
+  });
+
+  type activitiesType = {
+    userName: string;
+    activities: {
+      attendTime: string;
+      leaveTime: string | null;
+      activityTime: string | null;
+    }[];
+  }[];
+
+  const result = Array.from(userActivityMap.values()) as activitiesType;
+
+  await postWebhook({
+    embeds: [
+      {
+        title: "本日の活動記録",
+        fields: result.map((user) => {
+          return {
+            name: user.userName,
+            value:
+              user.activities.length > 1
+                ? user.activities
+                    .map((activity, index) => {
+                      return `**${index + 1}.**\n出席: ${
+                        activity.attendTime
+                      }\n退席: ${activity.leaveTime}\n活動時間: ${
+                        activity.activityTime
+                      }`;
+                    })
+                    .join("\n")
+                : `出席: ${user.activities[0].attendTime}\n退席: ${user.activities[0].leaveTime}\n活動時間: ${user.activities[0].activityTime}`,
+            inline: true,
+          };
+        }),
+        color: 0x15edc9,
+      },
+    ],
+  });
+
+  console.log("[Post Notification] FINISHED");
+};
+
+// At 23:00 every day
+schedule("00 23 * * *", async () => {
+  await AutoLeave();
+
+  console.log("[Scheduled] UPDATE STATUS");
+  await statusRepository.update({}, { status: StatusEnum.NOT_ATTEND });
+
+  await PostNotification();
 });
 
 export default apiRouter;

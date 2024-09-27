@@ -1,6 +1,7 @@
 export enum PermissionEnum {
   ADMIN = "admin",
   MODERATOR = "moderator",
+  TEACHER = "teacher",
   USER = "user",
   UNREGISTERED = "unregistered",
 }

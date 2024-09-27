@@ -9,9 +9,9 @@ import {
   organizationStatus,
   postActivity,
 } from "../../api/activity";
-import MemberStatusButton from "../../components/layout/MembersStatusButton";
 import { organizationStatusType } from "../../types/status";
 import Cards from "./components/Cards";
+import MemberStatusButton from "./components/MembersStatusButton";
 import RecordButton from "./components/RecordButton";
 
 const Container = styled.div`
