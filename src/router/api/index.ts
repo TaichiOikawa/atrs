@@ -74,11 +74,13 @@ apiRouter.get("/activity", async (req, res) => {
     .andWhere("activity.attendTime >= :start", {
       start: sevenDaysAgo.toISOString().slice(0, 10),
     })
+    .andWhere("activity.isAutoLeave = false")
     .getRawOne();
 
   const totalTime = await ActivityRepository.createQueryBuilder("activity")
     .select("SEC_TO_TIME(SUM(TIME_TO_SEC(activity.activityTime)))", "totalTime")
     .where("activity.user = :user", { user: res.locals.userInfo.user_id })
+    .andWhere("activity.isAutoLeave = false")
     .getRawOne();
 
   const activity = {
