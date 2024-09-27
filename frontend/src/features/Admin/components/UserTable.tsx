@@ -1,15 +1,8 @@
-import {
-  ActionIcon,
-  Badge,
-  Container,
-  Flex,
-  Group,
-  rem,
-  Table,
-} from "@mantine/core";
+import { ActionIcon, Container, Flex, Group, rem, Table } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../../api/users";
+import PermissionBadge from "../../../components/parts/PermissionBadge";
 import { PermissionEnum, UsersType } from "../../../types/user";
 import AddUser from "./AddUser";
 
@@ -28,27 +21,7 @@ function UserTable() {
       <Table.Td>{user.login_id}</Table.Td>
       <Table.Td>{user.name}</Table.Td>
       <Table.Td>
-        {user.permission === PermissionEnum.ADMIN ? (
-          <Badge variant="outline" color="pink" size="lg">
-            ADMIN
-          </Badge>
-        ) : user.permission === PermissionEnum.MODERATOR ? (
-          <Badge variant="outline" color="orange" size="lg">
-            MODERATOR
-          </Badge>
-        ) : user.permission === PermissionEnum.USER ? (
-          <Badge variant="outline" color="blue" size="lg">
-            USER
-          </Badge>
-        ) : user.permission === PermissionEnum.UNREGISTERED ? (
-          <Badge variant="outline" color="gray" size="lg">
-            UNREGISTERED
-          </Badge>
-        ) : (
-          <Badge variant="outline" color="gray" size="lg">
-            {user.permission}
-          </Badge>
-        )}
+        <PermissionBadge permission={user.permission as PermissionEnum} />
       </Table.Td>
       <Table.Td>
         <Group gap={0} justify="flex-end">

@@ -46,7 +46,9 @@ const postWebhook = async (req: requestType) => {
     return;
   }
   const res = await axios.post(webhookUrl, JSON.stringify(req), config);
-  console.log(res);
+  if (res.status !== 204) {
+    console.error("Failed to post webhook");
+  }
 };
 
 export default postWebhook;
