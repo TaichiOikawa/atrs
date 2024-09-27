@@ -1,8 +1,16 @@
+import Footer from "../components/layout/Footer";
+import Header from "../components/layout/Header";
+import ModeratorMain from "../features/Moderator/ModeratorMain";
+
 function Moderator() {
   return (
-    <div>
-      <h1>Moderator</h1>
-    </div>
+    <>
+      <Header />
+      <main>
+        <ModeratorMain />
+      </main>
+      <Footer />
+    </>
   );
 }
 
