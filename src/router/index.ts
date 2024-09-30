@@ -1,4 +1,5 @@
 import * as express from "express";
+import { readdirSync } from "fs";
 import path from "path";
 import { jwtHelper } from "../modules/jwtHelper";
 import apiRouter from "./api";
@@ -7,7 +8,6 @@ import socketRouter from "./socket";
 
 const router: express.Router = express.Router();
 
-router.use(express.static(path.join(__dirname, "..", "build")));
 router.use(
   "/api",
   async (req, res, next) => {
@@ -19,13 +19,16 @@ router.use("/auth", authRouter);
 
 router.use("/socket", socketRouter);
 
-router.use((req, res, next) => {
-  // socket.ioのパスにアクセスした場合は、index.htmlを返さない
-  if (req.path.startsWith("/socket.io")) {
-    return next();
-  }
-  console.log(req.path);
-  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
-});
+// Only Production (if build folder exists)
+if (readdirSync(path.join(__dirname, "..")).includes("build")) {
+  router.use(express.static(path.join(__dirname, "..", "build")));
+  router.use((req, res, next) => {
+    if (req.path.startsWith("/socket.io")) {
+      return next();
+    }
+    console.log(req.path);
+    res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+  });
+}
 
 export default router;

@@ -26,8 +26,8 @@ signupRouter.post(
       } else {
         if (
           !req.body.loginId ||
-          !req.body.password ||
           !req.body.name ||
+          !req.body.password ||
           !req.body.organizationId
         ) {
           res.status(400).send("Invalid request");

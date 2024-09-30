@@ -11,7 +11,6 @@ import Home from "./pages/Home";
 import { LoginPage } from "./pages/Login";
 import Moderator from "./pages/Moderator";
 import { NotFoundPage } from "./pages/NotFound";
-import { SignUpPage } from "./pages/SignUp";
 import Test from "./pages/test";
 import { PermissionEnum } from "./types/user";
 
@@ -23,12 +22,6 @@ function App() {
         path="/login"
         element={
           <CheckRoute children={<LoginPage />} authedNavigate="/dashboard" />
-        }
-      />
-      <Route
-        path="/sign-up"
-        element={
-          <CheckRoute children={<SignUpPage />} authedNavigate="/dashboard" />
         }
       />
       <Route

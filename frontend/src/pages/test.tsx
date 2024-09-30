@@ -2,11 +2,10 @@ import { Button } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000/");
-
 const Test: React.FC = () => {
   const [message, setMessage] = useState("");
   const [number, setNumber] = useState(0);
+  const socket = io("http://localhost:3000/");
 
   useEffect(() => {
     // サーバーからのメッセージを受け取る

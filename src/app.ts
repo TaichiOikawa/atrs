@@ -37,6 +37,8 @@ AppDataSource.initialize()
 initializeSocket(httpServer);
 event();
 
+require("./cron/activity");
+
 httpServer.listen(port, () => {
   console.log(`The app is listening on port ${port}`);
 });

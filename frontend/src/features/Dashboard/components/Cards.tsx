@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import TodaysActivity from "../../../components/layout/TodaysActivity";
 import WeeklyActivity from "../../../components/layout/WeeklyActivity";
+import { ActivityType } from "../../../types/activity";
 
 const StyledCards = styled.div`
   align-items: flex-start;
@@ -10,16 +11,8 @@ const StyledCards = styled.div`
   width: 100%;
 `;
 
-type Activity = {
-  attendTime: string;
-  leaveTime: string;
-  activityTime: string;
-  weeklyTime: string;
-  totalTime: string;
-};
-
 type CardsProps = {
-  activity: Activity;
+  activity: ActivityType;
 };
 
 function Cards({ activity }: CardsProps) {

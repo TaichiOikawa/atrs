@@ -39,9 +39,9 @@ const StyledAttendTime = styled.div`
 `;
 
 type TodaysActivityProps = {
-  attendTime: string;
-  leaveTime: string;
-  todaysActivityTime: string;
+  attendTime: string | null;
+  leaveTime: string | null;
+  todaysActivityTime: string | null;
 };
 
 function TodaysActivity(props: TodaysActivityProps) {
@@ -49,7 +49,7 @@ function TodaysActivity(props: TodaysActivityProps) {
     var todaysActivityTime = "活動記録がありません";
     var addStyle: object = { color: "red", fontSize: "1.1rem" };
   } else {
-    var todaysActivityTime = props.todaysActivityTime;
+    var todaysActivityTime = props.todaysActivityTime || "";
     var addStyle: object = {};
   }
 
@@ -58,8 +58,8 @@ function TodaysActivity(props: TodaysActivityProps) {
       <StyledToday>
         <h4>今日の活動記録</h4>
         <StyledAttendTime>
-          <p>出席：{props.attendTime}</p>
-          <p>離席：{props.leaveTime}</p>
+          <p>出席：{props.attendTime || ""}</p>
+          <p>離席：{props.leaveTime || ""}</p>
         </StyledAttendTime>
       </StyledToday>
       <TimeBox label="活動時間" time={todaysActivityTime} addStyle={addStyle} />

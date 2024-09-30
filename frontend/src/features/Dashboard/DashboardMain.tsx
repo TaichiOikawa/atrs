@@ -9,6 +9,7 @@ import {
   postActivity,
 } from "../../api/activity";
 import Organization from "../../components/parts/Organization";
+import { ActivityType } from "../../types/activity";
 import Cards from "./components/Cards";
 import MemberStatusButton from "./components/MembersStatusButton";
 import RecordButton from "./components/RecordButton";
@@ -27,17 +28,9 @@ const Container = styled.div`
   }
 `;
 
-type Activity = {
-  attendTime: string;
-  leaveTime: string;
-  activityTime: string;
-  weeklyTime: string;
-  totalTime: string;
-};
-
 function DashboardMain() {
   const [isAttend, setIsAttend] = useState<boolean>(false);
-  const [Activity, setActivity] = useState<Activity>({
+  const [Activity, setActivity] = useState<ActivityType>({
     attendTime: "",
     leaveTime: "",
     activityTime: "",
