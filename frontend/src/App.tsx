@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import { LoginPage } from "./pages/Login";
 import { NotFoundPage } from "./pages/NotFound";
 import { SignUpPage } from "./pages/SignUp";
+import Test from "./pages/test";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       />
       <Route path="/admin" element={<AdminRoute children={<Admin />} />} />
       <Route path="*" element={<NotFoundPage />} />
+      <Route path="/test" element={<Test />} />
     </Routes>
   );
 }
