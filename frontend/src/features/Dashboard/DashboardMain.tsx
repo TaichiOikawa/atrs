@@ -8,6 +8,7 @@ import {
   getActivityStatus,
   postActivity,
 } from "../../api/activity";
+import Organization from "../../components/parts/Organization";
 import Cards from "./components/Cards";
 import MemberStatusButton from "./components/MembersStatusButton";
 import RecordButton from "./components/RecordButton";
@@ -26,16 +27,6 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.div`
-  align-items: center;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  gap: 10px;
-  position: relative;
-  width: 100%;
-`;
-
 type Activity = {
   attendTime: string;
   leaveTime: string;
@@ -45,8 +36,6 @@ type Activity = {
 };
 
 function DashboardMain() {
-  const organization =
-    sessionStorage.getItem("organizationName") || "Organization";
   const [isAttend, setIsAttend] = useState<boolean>(false);
   const [Activity, setActivity] = useState<Activity>({
     attendTime: "",
@@ -106,9 +95,7 @@ function DashboardMain() {
 
   return (
     <Container>
-      <Title>
-        <h2>{organization}</h2>
-      </Title>
+      <Organization />
       <RecordButton
         isAttend={isAttend}
         postActivityButton={postActivityButton}

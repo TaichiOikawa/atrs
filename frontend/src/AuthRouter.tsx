@@ -2,6 +2,7 @@ import { Flex, Loader, Text } from "@mantine/core";
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./components/hooks/useAuth";
+import { PermissionEnum } from "./types/user";
 
 type Props = {
   children: React.ReactNode;
@@ -12,17 +13,21 @@ type CheckProps = {
   children: React.ReactNode;
 };
 
-export const AdminRoute = ({ children }: Props) => {
+type PermissionRouteProps = Props & {
+  permission: Array<PermissionEnum>;
+};
+
+export const PermissionRoute = (props: PermissionRouteProps) => {
   const check = useAuth();
 
   if (!check.checked) {
     return loadingPage;
   }
-  const permission = sessionStorage.getItem("permission") as string;
-  if (check.isAuthenticated && permission === "admin") {
-    return <>{children}</>;
-  }
-  if (check.isAuthenticated && permission !== "admin") {
+  if (check.isAuthenticated) {
+    const permission = check.permission;
+    if (permission) {
+      return <>{props.children}</>;
+    }
     return <Navigate to="/dashboard" />;
   }
   return <Navigate to="/" />;
