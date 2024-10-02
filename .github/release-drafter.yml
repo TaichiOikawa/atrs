@@ -1,0 +1,8 @@
+name-template: "Release v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+
+template: |
+  ## ATRS Release: v$RESOLVED_VERSION
+
+  ### What's changed?
+  Full change log: https://github.com/TaichiOikawa/atrs/blob/main/CHANGELOG.md
