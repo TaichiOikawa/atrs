@@ -1,8 +1,0 @@
-template: |
-  # Release ATRS $RESOLVED_VERSION
-
-  ## Changelog
-  Full Change log: https://github.com/TaichiOikawa/atrs/blob/main/CHANGELOG.md
-
-  ## What's Changed
-  $CHANGES
