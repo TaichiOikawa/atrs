@@ -34,7 +34,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-${{ steps.package-version.outputs.current-version }}
+          name: build-v${{ steps.package-version.outputs.current-version }}
           path: |
             .
             !frontend
@@ -53,7 +53,6 @@ jobs:
       contents: write
       pull-requests: write
 
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,6 +67,6 @@ jobs:
           RELEASE_TAG: ${{ steps.package-version.outputs.current-version }}
         uses: release-drafter/release-drafter@v6
         with:
-          tag: ${{ env.RELEASE_TAG }}
-          name: ${{ env.RELEASE_TAG }}
-          version: ${{ env.RELEASE_TAG }}
+          tag: v${{ env.RELEASE_TAG }}
+          name: v${{ env.RELEASE_TAG }}
+          version: v${{ env.RELEASE_TAG }}
