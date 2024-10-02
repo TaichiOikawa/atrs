@@ -11,9 +11,10 @@ import "./global.css";
 
 import { Notifications } from "@mantine/notifications";
 import axios from "axios";
+import apiBaseUrl from "./config/index.config";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = apiBaseUrl;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.post["Access-Control-Allow-Methods"] =
   "HEAD, GET, POST, PUT, DELETE, OPTIONS, PATCH";

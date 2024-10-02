@@ -5,11 +5,17 @@ import { Activity } from "../../entity/Activity";
 import { Status, StatusEnum } from "../../entity/Status";
 import { PermissionEnum, User } from "../../entity/User";
 import { timeDiff } from "../../modules/time";
+import { reload } from "../../socket/events/room";
 
 const apiRouter = Router();
 const ActivityRepository = AppDataSource.getRepository(Activity);
 const userRepository = AppDataSource.getRepository(User);
 const statusRepository = AppDataSource.getRepository(Status);
+
+const socketReload = () => {
+  console.debug("[Socket] user_status: reload");
+  reload("user_status");
+};
 
 apiRouter.get("/", (req, res) => {
   console.debug("GET /api");
@@ -72,22 +78,31 @@ apiRouter.get("/activity", async (req, res) => {
   };
 
   res.send(activity);
-  console.log("GET /api/activity");
 });
 
 apiRouter.post("/activity", async (req, res) => {
-  console.log("POST /api/activity");
-
-  const user = await userRepository.findOne({
-    where: {
-      user_id: res.locals.userInfo.user_id,
-    },
-  });
+  console.debug("POST /api/activity");
+  if (
+    req.body.userId &&
+    res.locals.userInfo.permission === PermissionEnum.ADMIN &&
+    res.locals.userInfo.permission === PermissionEnum.MODERATOR
+  ) {
+    var user = await userRepository.findOne({
+      where: {
+        user_id: req.body.userId,
+      },
+    });
+  } else {
+    var user = await userRepository.findOne({
+      where: {
+        user_id: res.locals.userInfo.user_id,
+      },
+    });
+  }
   if (!user) {
     res.status(400).send("User not found");
     return;
   }
-  const today = new Date();
   const activityInDb = await ActivityRepository.findOne({
     where: {
       user: user,
@@ -105,9 +120,10 @@ apiRouter.post("/activity", async (req, res) => {
     await ActivityRepository.save(activityInDb);
     // statusを更新
     await statusRepository.save({
-      user_id: res.locals.userInfo.user_id,
+      user_id: user.user_id,
       status: StatusEnum.LEAVE,
     });
+    res.send(StatusEnum.LEAVE);
   } else {
     // 出席記録がない場合は新規レコード
     const now = new Date();
@@ -117,11 +133,13 @@ apiRouter.post("/activity", async (req, res) => {
     });
     // statusを更新
     await statusRepository.save({
-      user_id: res.locals.userInfo.user_id,
+      user_id: user.user_id,
       status: StatusEnum.ACTIVE,
     });
+    res.send(StatusEnum.ACTIVE);
   }
-  res.send("OK");
+
+  socketReload();
 });
 
 apiRouter.get("/activity/status", async (req, res) => {
@@ -151,13 +169,18 @@ apiRouter.get("/activity/status", async (req, res) => {
 apiRouter.get("/organization/:organization_id/users", async (req, res) => {
   console.debug(`GET /api/organization/${req.params.organization_id}/users`);
 
-  if (res.locals.userInfo.permission !== PermissionEnum.ADMIN) {
+  if (
+    res.locals.userInfo.permission !== PermissionEnum.ADMIN &&
+    res.locals.userInfo.permission !== PermissionEnum.MODERATOR &&
+    res.locals.userInfo.permission !== PermissionEnum.TEACHER
+  ) {
     res.status(403).send("Permission denied");
     return;
   }
 
   const organizationId = req.params.organization_id;
 
+  // ユーザー情報を取得
   const users = await userRepository.find({
     select: ["user_id", "login_id", "name", "permission", "status"],
     where: {
@@ -173,7 +196,57 @@ apiRouter.get("/organization/:organization_id/users", async (req, res) => {
     return;
   }
 
-  res.send(users);
+  // 最新の活動記録を取得
+  const activities = await ActivityRepository.find({
+    where: {
+      user: {
+        organization: {
+          organization_id: organizationId,
+        },
+      },
+    },
+    relations: ["user"],
+    order: { activity_id: "DESC" },
+  });
+
+  // アクティビティをユーザーIDごとにマッピング
+  const userActivityMap = new Map();
+
+  activities.forEach((activity) => {
+    const userId = activity.user.user_id;
+
+    // まだそのユーザーの最新アクティビティがない場合のみ追加
+    if (!userActivityMap.has(userId)) {
+      userActivityMap.set(userId, {
+        attendTime: activity.attendTime,
+        leaveTime: activity.leaveTime,
+        activityTime: activity.activityTime,
+        isAutoLeave: activity.isAutoLeave,
+      });
+    }
+  });
+
+  // usersに対応するアクティビティを追加
+  const result = users.map((user) => {
+    const activityInfo = userActivityMap.get(user.user_id);
+    return {
+      user_id: user.user_id,
+      login_id: user.login_id,
+      name: user.name,
+      permission: user.permission,
+      status: user.status?.status || null,
+      activity: activityInfo
+        ? {
+            attendTime: activityInfo.attendTime,
+            leaveTime: activityInfo.leaveTime,
+            activityTime: activityInfo.activityTime,
+            isAutoLeave: activityInfo.isAutoLeave,
+          }
+        : null,
+    };
+  });
+
+  res.send(result);
 });
 
 apiRouter.get("/organization/:organization_id/status", async (req, res) => {

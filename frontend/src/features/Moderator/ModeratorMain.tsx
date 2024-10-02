@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Organization from "../../components/parts/Organization";
+import { PermissionEnum } from "../../types/user";
 import Members from "./components/Members";
 
 const Container = styled.div`
@@ -13,9 +14,18 @@ const Container = styled.div`
 `;
 
 function ModeratorMain() {
+  const permission = sessionStorage.getItem("permission") as PermissionEnum;
   return (
     <Container>
-      <Organization badgeTitle="Moderator Dashboard" badgeColor="orange" />
+      {permission === PermissionEnum.ADMIN ||
+      permission === PermissionEnum.MODERATOR ? (
+        <Organization badgeTitle="Moderator Dashboard" badgeColor="orange" />
+      ) : permission === PermissionEnum.TEACHER ? (
+        <Organization badgeTitle="Teacher Dashboard" badgeColor="purple" />
+      ) : (
+        <>ERROR</>
+      )}
+
       <Members />
     </Container>
   );

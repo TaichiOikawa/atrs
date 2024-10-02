@@ -1,14 +1,6 @@
 import axios from "axios";
+import { datetime } from "../types/datetime";
 import { organizationStatusType, StatusEnum } from "../types/status";
-
-const datetime = new Intl.DateTimeFormat(undefined, {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-});
 
 export const getActivity = async () => {
   console.log("GET /api/activity");
@@ -50,10 +42,10 @@ export const getActivityStatus = async (): Promise<boolean> => {
   }
 };
 
-export const postActivity = async () => {
+export const postActivity = async (userId?: number) => {
   console.log("POST /api/activity");
-  const res = await axios.post(`/api/activity`);
-  return res.data;
+  const res = await axios.post(`/api/activity`, { userId });
+  return res;
 };
 
 export const organizationStatus = async () => {

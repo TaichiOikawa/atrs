@@ -94,7 +94,7 @@ function DashboardMain() {
         postActivityButton={postActivityButton}
       />
       <Cards activity={Activity} />
-      <MemberStatusButton />
+      <MemberStatusButton update={isAttend} />
     </Container>
   );
 }

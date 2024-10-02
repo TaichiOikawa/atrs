@@ -46,7 +46,6 @@ export class jwtHelper {
 
     const decoded = jwtHelper.verifyToken(token);
     if (!decoded) {
-      console.log("Token is invalid");
       return res.status(401).json({ isAuthenticated: false });
     }
     const { user_id, login_id } = decoded as jwtPayloadType;
@@ -73,7 +72,6 @@ export class jwtHelper {
       res.locals.userInfo = userInDb;
       next();
     } else {
-      console.log("Token is invalid");
       return res.status(401).json({ isAuthenticated: false });
     }
   }

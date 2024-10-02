@@ -9,7 +9,6 @@ const loginRouter: express.Router = express.Router();
 const userRepository = AppDataSource.getRepository(User);
 
 loginRouter.post("/", async (req, res, next) => {
-  console.log("Login request received");
   try {
     const user = req.body;
 

@@ -6,7 +6,7 @@ type userInfoType = {
   user_id: number;
   login_id: string;
   name: string;
-  permission: string;
+  permission: PermissionEnum;
   organization: {
     organization_id: string;
     name: string;

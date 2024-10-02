@@ -1,5 +1,8 @@
-import { Button, Group } from "@mantine/core";
+import { Button, rem } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { IconX } from "@tabler/icons-react";
 import styled from "styled-components";
+import { postActivity } from "../../../api/activity";
 import { StatusEnum } from "../../../types/status";
 
 const StyledMemberStatusContent = styled.div`
@@ -64,7 +67,7 @@ const StyledMemberCard = styled.div`
   padding: 12px 15px;
   position: relative;
   width: fit-content;
-  min-width: 295px;
+  min-width: 280px;
 
   & .frame {
     width: 100%;
@@ -84,15 +87,43 @@ const StyledMemberCard = styled.div`
 `;
 
 type MemberCardProps = {
+  id: number;
   name: string;
   attendTime: string;
   leaveTime: string;
-  status: StatusEnum;
+  status: StatusEnum | null;
   activityTime: string;
   isEdit?: boolean | false;
 };
 
+const xIcon = <IconX size={rem(20)} />;
+
 function MemberCard(props: MemberCardProps) {
+  const handleClick = async () => {
+    try {
+      const res = await postActivity(props.id);
+      if (res.data === StatusEnum.ACTIVE) {
+        notifications.show({
+          message: `${props.name}さんの出席を記録しました。`,
+          color: "blue",
+        });
+      } else {
+        notifications.show({
+          message: `${props.name}さんの退席を記録しました。`,
+          color: "orange",
+        });
+      }
+    } catch (error) {
+      console.error(`[postActivityButton] error:`, error);
+      notifications.show({
+        title: "エラーが発生しました",
+        message: "もう一度お試しください",
+        icon: xIcon,
+        color: "red",
+      });
+      return;
+    }
+  };
   return (
     <StyledMemberCard
       style={
@@ -106,41 +137,41 @@ function MemberCard(props: MemberCardProps) {
       }
     >
       <div className="frame">
-        {props.status === StatusEnum.ACTIVE ? (
-          <img src="/person-fill-check.svg" alt="Status Icon (ACTIVE)" />
-        ) : props.status === StatusEnum.LEAVE ? (
-          <img src="/person-fill-dash.svg" alt="Status Icon (LEAVE)" />
-        ) : props.status === StatusEnum.NOT_ATTEND ? (
-          <img src="/person-fill-x.svg" alt="Status Icon (NOT_ATTEND)" />
-        ) : null}
-
+        <div style={{ textAlign: "center" }}>
+          {props.status === StatusEnum.ACTIVE ? (
+            <img src="/person-fill-check.svg" alt="Status Icon (ACTIVE)" />
+          ) : props.status === StatusEnum.LEAVE ? (
+            <img src="/person-fill-dash.svg" alt="Status Icon (LEAVE)" />
+          ) : props.status === StatusEnum.NOT_ATTEND ? (
+            <img src="/person-fill-x.svg" alt="Status Icon (NOT_ATTEND)" />
+          ) : null}
+          {props.isEdit ? (
+            <>
+              {props.status === StatusEnum.ACTIVE ? (
+                <Button
+                  color="var(--leave-color)"
+                  radius="md"
+                  style={{ color: "#534c4c" }}
+                  onClick={handleClick}
+                >
+                  退席
+                </Button>
+              ) : props.status === StatusEnum.LEAVE ||
+                props.status === StatusEnum.NOT_ATTEND ? (
+                <Button
+                  color="var(--attend-color)"
+                  radius="md"
+                  style={{ color: "#534c4c" }}
+                  onClick={handleClick}
+                >
+                  出席
+                </Button>
+              ) : null}
+            </>
+          ) : null}
+        </div>
         <MemberStatusContent {...props} />
       </div>
-      {props.isEdit ? (
-        <Group justify="center">
-          {props.status === StatusEnum.ACTIVE ? (
-            <Button
-              color="var(--leave-color)"
-              radius="md"
-              style={{ color: "#534c4c" }}
-            >
-              退席
-            </Button>
-          ) : props.status === StatusEnum.LEAVE ||
-            props.status === StatusEnum.NOT_ATTEND ? (
-            <Button
-              color="var(--attend-color)"
-              radius="md"
-              style={{ color: "#534c4c" }}
-            >
-              出席
-            </Button>
-          ) : null}
-          <Button color="#CAE9FF" radius="md" style={{ color: "#534c4c" }}>
-            ユーザー詳細
-          </Button>
-        </Group>
-      ) : null}
     </StyledMemberCard>
   );
 }

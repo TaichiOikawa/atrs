@@ -25,6 +25,7 @@ The ATRS's API is based on an HTTPS/REST API for general operations.
     - [GET /activity](#get-activity)
       - [Response](#response-1)
     - [POST /activity](#post-activity)
+      - [Request Body](#request-body)
       - [Response](#response-2)
     - [GET /activity/status](#get-activitystatus)
       - [Response](#response-3)
@@ -102,10 +103,16 @@ json response
 ### POST /activity
 This API logs activity. If your status is active, this API records leave time. If your status is "leave" or "not_attend", this API records attendance time.
 
+#### Request Body
+| JSON Key | Type | required | description |
+| --- | --- | --- | --- |
+| userId | string |  | Specify the UserId of the user to be recorded. This is only available if the Permission is ADMIN or MODERATOR.
+
+
 #### Response
 | Status Code | Response Type | value | Description |
 | --- | --- | --- | --- |
-| **200 OK** | text | `OK` |
+| **200 OK** | [Status](#status) |  | Returns the user's new status.
 | **400 Bad Request** | text | `User not found` | The requested user was not found in the database.
 
 
@@ -134,10 +141,16 @@ json response
 | --- | --- | --- |
 | user_id | number |
 | login_id | string | Value to use when logging in.
-| name | string | User name.
-| permission | [Permission](#permission) | User permission.
-| status | [Status](#status) | User status.
+| name | string | The user name.
+| permission | [Permission](#permission) | The user permission.
+| status | [Status](#status) \| null | The user status.
+| activity | object \| null | The user's latest activity info.
+| &emsp;attendTime | Time | The user's latest attend time.
+| &emsp;leaveTime | Time \| null | The user's latest leave time.
+| &emsp;activityTime | string† \| null | The user's latest active time.
+| &emsp;isAutoLeave | bool \| null | Whether the user was AutoLeave in the most recent activity record.
 
+† This value format is "00h 00min".
 
 ### GET /organization/:organization_id/status
 This API returns users belonging to your organization with each status.

@@ -49,7 +49,7 @@ function TodaysActivity(props: TodaysActivityProps) {
     var todaysActivityTime = "活動記録がありません";
     var addStyle: object = { color: "red", fontSize: "1.1rem" };
   } else {
-    var todaysActivityTime = props.todaysActivityTime || "";
+    var todaysActivityTime = props.todaysActivityTime || "00h 00min";
     var addStyle: object = {};
   }
 

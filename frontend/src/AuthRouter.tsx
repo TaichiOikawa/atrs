@@ -15,6 +15,14 @@ type CheckProps = {
 
 type PermissionRouteProps = Props & {
   permission: Array<PermissionEnum>;
+  failNavigate: string;
+};
+
+type DashboardRouteProps = Props & {
+  route: {
+    permission: PermissionEnum;
+    navigate: string;
+  }[];
 };
 
 export const PermissionRoute = (props: PermissionRouteProps) => {
@@ -25,11 +33,31 @@ export const PermissionRoute = (props: PermissionRouteProps) => {
   }
   if (check.isAuthenticated) {
     const permission = check.permission;
-    if (permission) {
+    if (permission && props.permission.includes(permission)) {
       return <>{props.children}</>;
     }
-    return <Navigate to="/dashboard" />;
+    return <Navigate to={props.failNavigate} />;
   }
+  return <Navigate to="/" />;
+};
+
+export const DashboardRouter = (props: DashboardRouteProps) => {
+  const check = useAuth();
+
+  if (!check.checked) {
+    return loadingPage;
+  }
+  if (check.isAuthenticated) {
+    const permission = check.permission;
+    if (permission) {
+      const route = props.route.find((r) => r.permission === permission);
+      if (route) {
+        return <Navigate to={route.navigate} />;
+      }
+      return <>{props.children}</>;
+    }
+  }
+
   return <Navigate to="/" />;
 };
 
@@ -49,7 +77,7 @@ export const PrivateRoute = ({ children }: Props) => {
 export const GuestRoute = (props: Props) => {
   const { children } = props;
   const check = useAuth();
-  console.log(check);
+  console.debug(check);
 
   if (!check.checked) {
     return loadingPage;

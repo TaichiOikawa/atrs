@@ -58,13 +58,7 @@ function Footer() {
       </StyledLeftBox>
       <StyledRightBox>
         <a href="https://forms.gle/JELHgY6ttFEUQQ8q9">問題を報告</a>
-        <HoverCard width="auto" shadow="md" position="top">
-          <HoverCard.Target>
-            <a href="">ステータス</a>
-          </HoverCard.Target>
-
-          <HoverCard.Dropdown>{building}</HoverCard.Dropdown>
-        </HoverCard>
+        <a href="https://stats.uptimerobot.com/irUHIgJYur">ステータス</a>
         <HoverCard width="auto" shadow="md" position="top">
           <HoverCard.Target>
             <a href="">ATRS について</a>
