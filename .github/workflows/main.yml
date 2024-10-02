@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,40 +38,16 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-${{ steps.package-version.outputs.current-version }}
+          name: v${{ steps.package-version.outputs.current-version }}
           path: |
             .
-            !frontend
             !node_modules
+            !frontend
 
       - name: Auto Merge
         if: github.event_name == 'pull_request'
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr review "$PR_URL" --approve
           gh pr merge "$PR_URL" --auto --merge
-
-  release:
-    permissions:
-      contents: write
-      pull-requests: write
-
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: get-npm-version
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@v1.3.1
-
-      - name: Create Release Tag
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ steps.package-version.outputs.current-version }}
-        uses: release-drafter/release-drafter@v6
-        with:
-          tag: ${{ env.RELEASE_TAG }}
-          name: ${{ env.RELEASE_TAG }}
-          version: ${{ env.RELEASE_TAG }}
