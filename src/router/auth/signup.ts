@@ -26,8 +26,8 @@ signupRouter.post(
       } else {
         if (
           !req.body.loginId ||
-          !req.body.password ||
           !req.body.name ||
+          !req.body.password ||
           !req.body.organizationId
         ) {
           res.status(400).send("Invalid request");
@@ -157,7 +157,7 @@ signupRouter.post("/unregistered", async (req, res, next) => {
 
     await statusRepository.save({
       user_id: userInDb.user_id,
-      status: StatusEnum.LEAVE,
+      status: StatusEnum.NOT_ATTEND,
     });
 
     res.status(200).send("User Updated");

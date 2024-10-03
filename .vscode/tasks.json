@@ -5,26 +5,37 @@
             "label": "Run Docker Compose",
             "type": "shell",
             "command": "cd ${workspaceFolder}/.develop && docker-compose up -d",
-            "runOptions": {
-                "runOn": "folderOpen"
-            },
+            "isBackground": true,
         },
         {
             "label": "Run Backend",
             "type": "shell",
+            "dependsOn": [
+                "Run Docker Compose"
+            ],
             "command": "npm run dev",
-            "dependsOn": "Run Docker Compose",
-            "runOptions": {
-                "runOn": "folderOpen"
-            }
         },
         {
             "label": "Run Frontend",
             "type": "shell",
+            "dependsOn": [
+                "Run Docker Compose"
+            ],
             "command": "cd ${workspaceFolder}/frontend && npm run dev",
-            "dependsOn": "Run Docker Compose",
+        },
+        {
+            "label": "dev",
+            "type": "shell",
+            "dependsOn": [
+                "Run Backend",
+                "Run Frontend"
+            ],
             "runOptions": {
                 "runOn": "folderOpen"
+            },
+            "icon": {
+                "dark": "checkmark",
+                "light": "checkmark"
             }
         }
     ]

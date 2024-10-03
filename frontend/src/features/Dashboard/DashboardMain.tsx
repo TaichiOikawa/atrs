@@ -6,10 +6,10 @@ import styled from "styled-components";
 import {
   getActivity,
   getActivityStatus,
-  organizationStatus,
   postActivity,
 } from "../../api/activity";
-import { organizationStatusType } from "../../types/status";
+import Organization from "../../components/parts/Organization";
+import { ActivityType } from "../../types/activity";
 import Cards from "./components/Cards";
 import MemberStatusButton from "./components/MembersStatusButton";
 import RecordButton from "./components/RecordButton";
@@ -28,37 +28,16 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.div`
-  align-items: center;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  gap: 10px;
-  position: relative;
-  width: 100%;
-`;
-
-type Activity = {
-  attendTime: string;
-  leaveTime: string;
-  activityTime: string;
-  weeklyTime: string;
-  totalTime: string;
-};
-
 function DashboardMain() {
-  const organization =
-    sessionStorage.getItem("organizationName") || "Organization";
   const [isAttend, setIsAttend] = useState<boolean>(false);
-  const [Activity, setActivity] = useState<Activity>({
+  const [Activity, setActivity] = useState<ActivityType>({
     attendTime: "",
     leaveTime: "",
     activityTime: "",
     weeklyTime: "",
     totalTime: "",
   });
-  const [memberStatus, setMemberStatus] =
-    useState<organizationStatusType>(null);
+
   const xIcon = <IconX size={rem(20)} />;
 
   console.log("DashboardMainが再描画されました");
@@ -75,14 +54,6 @@ function DashboardMain() {
       setActivity(activity);
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      // 組織の状態を取得
-      const res = await organizationStatus();
-      setMemberStatus(res);
-    })();
-  }, [isAttend]);
 
   const postActivityButton = async () => {
     try {
@@ -117,15 +88,13 @@ function DashboardMain() {
 
   return (
     <Container>
-      <Title>
-        <h2>{organization}</h2>
-      </Title>
+      <Organization />
       <RecordButton
         isAttend={isAttend}
         postActivityButton={postActivityButton}
       />
       <Cards activity={Activity} />
-      <MemberStatusButton status={memberStatus} />
+      <MemberStatusButton update={isAttend} />
     </Container>
   );
 }

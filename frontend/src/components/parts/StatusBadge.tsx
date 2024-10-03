@@ -2,27 +2,30 @@ import { Badge } from "@mantine/core";
 import { StatusEnum } from "../../types/status";
 
 type StatusBadgeProps = {
-  status: StatusEnum;
+  status: StatusEnum | null;
+  fullWidth?: boolean;
 };
 
-function StatusBadge(props: StatusBadgeProps) {
+function StatusBadge({ status, fullWidth = true }: StatusBadgeProps) {
   return (
     <>
-      {props.status === StatusEnum.ACTIVE ? (
-        <Badge fullWidth variant="light" color="blue" size="lg">
+      {!status ? (
+        <></>
+      ) : status === StatusEnum.ACTIVE ? (
+        <Badge fullWidth={fullWidth} variant="light" color="blue" size="lg">
           ACTIVE
         </Badge>
-      ) : props.status === StatusEnum.LEAVE ? (
-        <Badge fullWidth variant="light" color="orange" size="lg">
+      ) : status === StatusEnum.LEAVE ? (
+        <Badge fullWidth={fullWidth} variant="light" color="orange" size="lg">
           LEAVED
         </Badge>
-      ) : props.status === StatusEnum.NOT_ATTEND ? (
-        <Badge fullWidth variant="light" color="gray" size="lg">
+      ) : status === StatusEnum.NOT_ATTEND ? (
+        <Badge fullWidth={fullWidth} variant="light" color="gray" size="lg">
           NOT ATTEND
         </Badge>
       ) : (
-        <Badge fullWidth variant="default" size="lg">
-          {props.status + " [ERROR]"}
+        <Badge fullWidth={fullWidth} variant="default" size="lg">
+          {status + " [ERROR]"}
         </Badge>
       )}
     </>

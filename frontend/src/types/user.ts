@@ -1,3 +1,5 @@
+import { StatusEnum } from "./status";
+
 export enum PermissionEnum {
   ADMIN = "admin",
   MODERATOR = "moderator",
@@ -12,6 +14,12 @@ export type UsersType = [
     login_id: string;
     name: string;
     permission: PermissionEnum;
-    status: string;
+    status: StatusEnum | null;
+    activity: {
+      attendTime: string;
+      leaveTime: string | null;
+      activityTime: string | null;
+      isAutoLeave: boolean | null;
+    } | null;
   }
 ];

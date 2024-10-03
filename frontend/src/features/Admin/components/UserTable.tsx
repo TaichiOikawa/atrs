@@ -1,9 +1,20 @@
-import { ActionIcon, Container, Flex, Group, rem, Table } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Container,
+  Flex,
+  Group,
+  HoverCard,
+  rem,
+  Table,
+  Text,
+} from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { getUsers } from "../../../api/users";
 import PermissionBadge from "../../../components/parts/PermissionBadge";
-import { PermissionEnum, UsersType } from "../../../types/user";
+import StatusBadge from "../../../components/parts/StatusBadge";
+import { UsersType } from "../../../types/user";
 import AddUser from "./AddUser";
 
 function UserTable() {
@@ -21,7 +32,34 @@ function UserTable() {
       <Table.Td>{user.login_id}</Table.Td>
       <Table.Td>{user.name}</Table.Td>
       <Table.Td>
-        <PermissionBadge permission={user.permission as PermissionEnum} />
+        <PermissionBadge permission={user.permission} />
+      </Table.Td>
+      <Table.Td>
+        <HoverCard>
+          <HoverCard.Target>
+            <div>
+              <StatusBadge status={user.status} fullWidth={false} />
+            </div>
+          </HoverCard.Target>
+          <HoverCard.Dropdown>
+            {user.activity ? (
+              <Container>
+                <Text>Attend Time: {user.activity.attendTime}</Text>
+                <Text>Leave Time: {user.activity.leaveTime}</Text>
+                <Text>Activity Time: {user.activity.activityTime}</Text>
+                {user.activity.isAutoLeave ? (
+                  <Badge color="pink" size="sm">
+                    AUTO LEAVE
+                  </Badge>
+                ) : (
+                  <></>
+                )}
+              </Container>
+            ) : (
+              <Text c="red">No Activity</Text>
+            )}
+          </HoverCard.Dropdown>
+        </HoverCard>
       </Table.Td>
       <Table.Td>
         <Group gap={0} justify="flex-end">
@@ -47,19 +85,20 @@ function UserTable() {
       <Flex justify="flex-end" align="center">
         <AddUser />
       </Flex>
-      <Container size="lg" mt="md">
-        <Table horizontalSpacing="md" verticalSpacing="sm">
+      <div>
+        <Table verticalSpacing="sm">
           <Table.Thead>
             <Table.Tr>
               <Table.Th>User ID</Table.Th>
               <Table.Th>Login ID</Table.Th>
               <Table.Th>Name</Table.Th>
               <Table.Th>Permission</Table.Th>
+              <Table.Th>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
-      </Container>
+      </div>
     </>
   );
 }

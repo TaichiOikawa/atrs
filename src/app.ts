@@ -1,10 +1,14 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import { createServer } from "http";
 import { AppDataSource } from "../data-source";
 import router from "./router";
+import { initializeSocket } from "./socket";
+import { event } from "./socket/event";
 
 const app: express.Express = express();
+const httpServer = createServer(app);
 const port = 3000;
 
 const corsOptions = {
@@ -29,6 +33,12 @@ AppDataSource.initialize()
     console.error("Data source initialization failed", error);
   });
 
-app.listen(port, () => {
+// Socket.io init
+initializeSocket(httpServer);
+event();
+
+require("./cron/activity");
+
+httpServer.listen(port, () => {
   console.log(`The app is listening on port ${port}`);
 });

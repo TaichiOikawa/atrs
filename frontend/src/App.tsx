@@ -1,11 +1,17 @@
 import { Route, Routes } from "react-router-dom";
-import { AdminRoute, CheckRoute, GuestRoute, PrivateRoute } from "./AuthRouter";
+import {
+  CheckRoute,
+  DashboardRouter,
+  GuestRoute,
+  PermissionRoute,
+} from "./AuthRouter";
 import Admin from "./pages/Admin";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import { LoginPage } from "./pages/Login";
+import Moderator from "./pages/Moderator";
 import { NotFoundPage } from "./pages/NotFound";
-import { SignUpPage } from "./pages/SignUp";
+import { PermissionEnum } from "./types/user";
 
 function App() {
   return (
@@ -18,16 +24,41 @@ function App() {
         }
       />
       <Route
-        path="/sign-up"
+        path="/dashboard"
         element={
-          <CheckRoute children={<SignUpPage />} authedNavigate="/dashboard" />
+          <DashboardRouter
+            route={[
+              { permission: PermissionEnum.ADMIN, navigate: "/admin" },
+              { permission: PermissionEnum.TEACHER, navigate: "/moderator" },
+            ]}
+            children={<Dashboard />}
+          />
         }
       />
       <Route
-        path="/dashboard"
-        element={<PrivateRoute children={<Dashboard />} />}
+        path="/admin"
+        element={
+          <PermissionRoute
+            children={<Admin />}
+            permission={[PermissionEnum.ADMIN]}
+            failNavigate="/dashboard"
+          />
+        }
       />
-      <Route path="/admin" element={<AdminRoute children={<Admin />} />} />
+      <Route
+        path="/moderator"
+        element={
+          <PermissionRoute
+            children={<Moderator />}
+            permission={[
+              PermissionEnum.ADMIN,
+              PermissionEnum.MODERATOR,
+              PermissionEnum.TEACHER,
+            ]}
+            failNavigate="/dashboard"
+          />
+        }
+      />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
