@@ -32,7 +32,7 @@ const StyledStatusIcon = styled.div`
 `;
 
 type RecordButtonProps = {
-  isAttend: Boolean;
+  isAttend: boolean;
   postActivityButton: () => Promise<void>;
 };
 

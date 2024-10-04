@@ -1,6 +1,6 @@
 {
-  "name": "atrs-backend",
-  "version": "1.0.2",
+  "name": "atrs",
+  "version": "1.0.3",
   "main": "./src/app.ts",
   "scripts": {
     "start": "NODE_ENV=production ts-node --transpile-only src/app.ts",

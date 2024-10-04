@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import { createServer } from "http";
 import { AppDataSource } from "../data-source";
+import corsOptions from "./config/front.config";
 import router from "./router";
 import { initializeSocket } from "./socket";
 import { event } from "./socket/event";
@@ -10,12 +11,6 @@ import { event } from "./socket/event";
 const app: express.Express = express();
 const httpServer = createServer(app);
 const port = 3000;
-
-const corsOptions = {
-  origin: ["http://localhost:5173"],
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
 
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
