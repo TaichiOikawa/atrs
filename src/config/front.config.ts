@@ -1,10 +1,20 @@
+import { CorsOptions } from "cors";
+
 if (process.env.NODE_ENV === "development") {
-  var apiBaseUrl = "http://localhost:5173/";
+  var corsOptions: CorsOptions = {
+    origin: ["http://localhost:5173"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  };
 } else if (process.env.NODE_ENV === "production") {
-  var apiBaseUrl = "/";
+  var corsOptions: CorsOptions = {
+    origin: ["http://localhost:5173"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  };
 } else {
   console.error("NODE_ENV is not set");
-  var apiBaseUrl = "";
+  var corsOptions: CorsOptions = {};
 }
 
-export default apiBaseUrl;
+export default corsOptions;

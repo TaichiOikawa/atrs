@@ -6,10 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,26 +47,3 @@ jobs:
         run: |
           gh pr review "$PR_URL" --approve
           gh pr merge "$PR_URL" --auto --merge
-
-  release:
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
-    needs: build
-    permissions:
-      contents: write
-      pull-requests: write
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: get-npm-version
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@v1.3.1
-
-      - name: Release
-        uses: release-drafter/release-drafter@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ steps.package-version.outputs.current-version }}
-          tag: ${{ steps.package-version.outputs.current-version }}
-          version: ${{ steps.package-version.outputs.current-version }}

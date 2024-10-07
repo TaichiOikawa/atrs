@@ -45,13 +45,22 @@ type MemberStatusContentProps = {
 };
 
 function MemberStatusContent(props: MemberStatusContentProps) {
+  const formatTime = (time: string) => {
+    if (!time) return "";
+    return time.slice(5);
+  };
+  const formatActivityTime = (time: string) => {
+    if (!time) return "";
+    const [hour, minute] = time.split(":");
+    return `${hour}h ${minute}min`;
+  };
   return (
     <StyledMemberStatusContent>
       <h4>{props.name}</h4>
       <div>
-        <p>出席時間: {props.attendTime}</p>
-        <p>退席時間: {props.leaveTime}</p>
-        <p>活動時間: {props.activityTime}</p>
+        <p>出席時間: {formatTime(props.attendTime)}</p>
+        <p>退席時間: {formatTime(props.leaveTime)}</p>
+        <p>活動時間: {formatActivityTime(props.activityTime)}</p>
       </div>
     </StyledMemberStatusContent>
   );
@@ -67,7 +76,8 @@ const StyledMemberCard = styled.div`
   padding: 12px 15px;
   position: relative;
   width: fit-content;
-  min-width: 280px;
+  width: 310px;
+  transition: background-color 0.3s;
 
   & .frame {
     width: 100%;
@@ -102,6 +112,15 @@ function MemberCard(props: MemberCardProps) {
   const handleClick = async () => {
     try {
       const res = await postActivity(props.id);
+      if (res.status !== 200) {
+        notifications.show({
+          title: "エラーが発生しました",
+          message: "もう一度お試しください",
+          icon: xIcon,
+          color: "red",
+        });
+        return;
+      }
       if (res.data === StatusEnum.ACTIVE) {
         notifications.show({
           message: `${props.name}さんの出席を記録しました。`,

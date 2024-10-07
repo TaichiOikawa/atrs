@@ -19,7 +19,7 @@ export class Status {
   @PrimaryColumn()
   user_id: number;
 
-  @Column({ type: "enum", enum: StatusEnum, default: StatusEnum.LEAVE })
+  @Column({ type: "enum", enum: StatusEnum, default: StatusEnum.NOT_ATTEND })
   status: StatusEnum;
 
   @OneToOne(() => User, (user) => user.status)

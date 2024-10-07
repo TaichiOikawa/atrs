@@ -8,7 +8,7 @@ The ATRS's API is based on an HTTPS/REST API for general operations.
 > [!NOTE]
 > The ATRS uses the JWT stored in the client cookie. If you want to use the ATRS API, access the Authentication API.
 >
-> For more information, see [**Authentication API Reference**](./API_Reference.md).
+> For more information, see [**Authentication API Reference**](./Authentication_API_Reference.md).
 
 
 ## table of contents
@@ -20,7 +20,7 @@ The ATRS's API is based on an HTTPS/REST API for general operations.
     - [Status](#status)
     - [Permission](#permission)
   - [API](#api)
-    - [GET /](#get-)
+    - [GET / (root)](#get--root)
       - [Response](#response)
     - [GET /activity](#get-activity)
       - [Response](#response-1)
@@ -70,7 +70,7 @@ enum PermissionEnum {
 
 
 ## API
-### GET /
+### GET / (root)
 This is used for debugging.
 
 #### Response
@@ -114,6 +114,7 @@ This API logs activity. If your status is active, this API records leave time. I
 | --- | --- | --- | --- |
 | **200 OK** | [Status](#status) |  | Returns the user's new status.
 | **400 Bad Request** | text | `User not found` | The requested user was not found in the database.
+| **403 Forbidden** | text | `Permission denied` | Returns if the UserId is specified and there are insufficient permissions.
 
 
 ### GET /activity/status
