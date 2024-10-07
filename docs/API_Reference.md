@@ -8,7 +8,7 @@ The ATRS's API is based on an HTTPS/REST API for general operations.
 > [!NOTE]
 > The ATRS uses the JWT stored in the client cookie. If you want to use the ATRS API, access the Authentication API.
 >
-> For more information, see [**Authentication API Reference**](./API_Reference.md).
+> For more information, see [**Authentication API Reference**](./Authentication_API_Reference.md).
 
 
 ## table of contents
