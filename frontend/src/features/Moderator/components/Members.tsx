@@ -68,7 +68,12 @@ function Members() {
         </Group>
         <StyledMembers>
           {data?.map((member) => {
-            if (member.permission === PermissionEnum.UNREGISTERED) return;
+            if (
+              member.permission === PermissionEnum.UNREGISTERED ||
+              member.permission === PermissionEnum.ADMIN ||
+              member.permission === PermissionEnum.TEACHER
+            )
+              return;
             return (
               <MemberCard
                 key={member.user_id}
