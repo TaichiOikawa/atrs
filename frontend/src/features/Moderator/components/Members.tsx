@@ -104,7 +104,7 @@ function Members() {
           )}
         </Group>
       </Flex>
-      <Container>
+      <Container size="100%">
         <Stack justify="center" align="stretch" gap="md">
           <StyledMembers>
             {data?.map((member) => {
