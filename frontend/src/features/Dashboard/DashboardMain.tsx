@@ -71,9 +71,9 @@ function DashboardMain() {
   }, []);
 
   const postActivityButton = async () => {
+    const now = new Date();
     if (!activity.leaveTime && activity.attendTime) {
       const attend = new Date(activity.attendTime);
-      const now = new Date();
       const diff = now.getTime() - attend.getTime();
       // 活動時間が1分以下の場合
       if (diff < ms("1m")) {
@@ -82,6 +82,23 @@ function DashboardMain() {
             onClose: (value: string) => close(value, resolve),
             title: "活動時間が1分以下です",
             description: "退席を記録しますか？",
+          });
+          toggle.open();
+        });
+        console.log(`[postActivityButton] ret:`, ret);
+        if (ret === "cancel" || ret === "close") {
+          return;
+        }
+      }
+    }
+    if (activity.leaveTime) {
+      const leave = new Date(activity.leaveTime);
+      if (leave.getDate() == now.getDate()) {
+        const ret = await new Promise<string>((resolve) => {
+          setModalConfig({
+            onClose: (value: string) => close(value, resolve),
+            title: "既に出席記録が存在しています",
+            description: "再度出席を記録しますか？",
           });
           toggle.open();
         });

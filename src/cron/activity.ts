@@ -1,10 +1,11 @@
 import { schedule } from "node-cron";
 import { IsNull, Raw } from "typeorm";
 import { AppDataSource } from "../../data-source";
-import { Activity } from "../entity/Activity";
-import { Status, StatusEnum } from "../entity/Status";
-import postWebhook from "../modules/discordWebhook";
-import { datetime, timeDiff } from "../modules/time";
+import { Activity } from "../../src/entity/Activity";
+import { Status, StatusEnum } from "../../src/entity/Status";
+import postWebhook from "../../src/modules/discordWebhook";
+import { datetime, timeDiff } from "../../src/modules/time";
+import { socketStatusReload } from "../../src/socket/events/room";
 
 const ActivityRepository = AppDataSource.getRepository(Activity);
 const statusRepository = AppDataSource.getRepository(Status);
@@ -45,6 +46,7 @@ const AutoLeave = async () => {
       activity.isAutoLeave = true;
       await ActivityRepository.save(activity);
     }
+    socketStatusReload();
     console.log(`[AUTO LEAVE] UserID: ${status.user.login_id}  [auto leave]`);
   });
   console.log("[AUTO LEAVE] FINISHED");

@@ -5,17 +5,16 @@ import { Activity } from "../../entity/Activity";
 import { Status, StatusEnum } from "../../entity/Status";
 import { PermissionEnum, User } from "../../entity/User";
 import { timeDiff } from "../../modules/time";
-import { reload } from "../../socket/events/room";
+import {
+  notifyTypeEnum,
+  socketStatusNotify,
+  socketStatusReload,
+} from "../../socket/events/room";
 
 const activityRouter = Router();
 const ActivityRepository = AppDataSource.getRepository(Activity);
 const userRepository = AppDataSource.getRepository(User);
 const statusRepository = AppDataSource.getRepository(Status);
-
-const socketReload = () => {
-  console.debug("[Socket] user_status: reload");
-  reload("user_status");
-};
 
 activityRouter.get("/", async (req, res) => {
   console.debug("GET /api/activity");
@@ -124,6 +123,7 @@ activityRouter.post("/", async (req, res) => {
       status: StatusEnum.LEAVE,
     });
     res.send(StatusEnum.LEAVE);
+    socketStatusNotify(notifyTypeEnum.LEAVE);
   } else {
     // 出席記録がない場合は新規レコード
     const now = new Date();
@@ -137,9 +137,10 @@ activityRouter.post("/", async (req, res) => {
       status: StatusEnum.ACTIVE,
     });
     res.send(StatusEnum.ACTIVE);
+    socketStatusNotify(notifyTypeEnum.ATTEND);
   }
 
-  socketReload();
+  socketStatusReload();
 });
 
 activityRouter.get("/status", async (req, res) => {
