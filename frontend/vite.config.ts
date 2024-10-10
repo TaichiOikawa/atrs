@@ -4,6 +4,9 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
+    define: {
+      APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    },
     plugins: [react()],
     build: {
       outDir: "../src/build",
