@@ -23,11 +23,18 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  font-size: 4rem !important;
-  text-align: center;
-  color: var(--logo-font-color);
-  margin: 20px 0 !important;
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 30px;
+  img {
+    width: 100%;
+  }
+  h1 {
+    letter-spacing: 0.18em;
+    color: var(--logo-font-color);
+  }
 `;
 
 const LoginButton = styled.button`
@@ -44,7 +51,10 @@ function Home() {
   return (
     <>
       <Container>
-        <Title>ATRS アトラス</Title>
+        <Logo>
+          <img src="/atrs.svg" alt="ATRS Logo" />
+          <h1>アトラス</h1>
+        </Logo>
         <LoginButton
           onClick={() => {
             window.location.href = "/login";

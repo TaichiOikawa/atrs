@@ -9,7 +9,10 @@ html {
 
 body {
   font-size: 1rem;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
   margin: 0;
   padding: 0;
 }
@@ -35,7 +38,6 @@ main {
 h1, h2, h3, h4 {
   margin: 0;
   font-weight: bold;
-  font-family: 'Roboto', sans-serif;
 }
 
 h1 {
@@ -86,7 +88,7 @@ div, p {
 /* Style Guide */
 :root {
   --background-color: #f1f1f1;
-  --pale-background-color: #f3f3f3;
+  --pale-background-color: #f8f8f8;
   --card-bg-color: #ddefff;
   --link-color: #2e54fd;
   --button-default-color: #3681e2;

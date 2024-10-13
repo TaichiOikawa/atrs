@@ -14,8 +14,8 @@ const StyledLoginContainer = styled.div`
   background-color: var(--pale-background-color);
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 0 18px;
+  gap: 25px;
+  padding: 0 18px 20px;
   justify-content: center;
   position: relative;
 `;
@@ -48,14 +48,6 @@ const StyledForm = styled.div`
     justify-content: center;
     position: relative;
     width: 100%;
-  }
-
-  & h2 {
-    align-self: stretch;
-    color: #000;
-    font-size: 1.2rem;
-    position: relative;
-    margin: 10px 0 0;
   }
 
   & a {
@@ -191,8 +183,10 @@ export const LoginPage = () => {
 
   return (
     <StyledLoginContainer>
+      <div style={{ textAlign: "center" }}>
+        <img src="/atrs.svg" alt="" style={{ height: "60px" }} />
+      </div>
       <StyledForm>
-        <h2>ATRS アトラス ログイン画面</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <StyledInputBox>
             <StyledInput>

@@ -1,4 +1,6 @@
+import { Avatar, Menu, rem, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { IconLogout } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { logout } from "../../api/auth";
@@ -8,50 +10,17 @@ const StyledHeader = styled.header`
   background-color: var(--background-color);
   display: flex;
   justify-content: space-between;
-  padding: 5px 30px;
+  padding: 5px 25px;
+  height: 62px;
 
   & .logo {
     display: flex;
     align-items: center;
-    flex-direction: column;
-    color: var(--logo-font-color);
-    & p {
-      margin-top: -6px;
-      font-size: 1rem;
+    flex-direction: row;
+    img {
+      height: 2.5rem;
     }
   }
-
-  & .account-icon {
-    height: 43px;
-    position: relative;
-    width: 43px;
-    margin: 16px 12px 11px;
-  }
-`;
-
-const UserBox = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const UserInfo = styled.div`
-  .userName {
-    font-size: 1.2rem;
-  }
-  p {
-    margin: 0 0;
-    font-size: 0.85rem;
-  }
-`;
-
-const LogoutButton = styled.button`
-  background-color: var(--button-default-color);
-  border-radius: 5px;
-  color: #fff;
-  font-size: 0.85rem;
-  margin-left: 10px;
-  padding: 10px 15px;
-  cursor: pointer;
 `;
 
 function Header() {
@@ -69,26 +38,40 @@ function Header() {
   const userName: string = sessionStorage.getItem("name") || "Guest";
   const LoginId: string = sessionStorage.getItem("loginId") || "Guest";
 
+  const iconStyle = { width: rem(18), height: rem(18) };
+
   return (
     <StyledHeader>
-      <div className="logo">
-        <h1>ATRS</h1>
-        <p>アトラス</p>
+      <a className="logo" href="/dashboard">
+        <img src="/atrs.svg" alt="ATRS Logo" />
+      </a>
+      <div>
+        <Menu shadow="md" width={200}>
+          <Menu.Target>
+            <Avatar name={userName} color="initials" w="40px" h="40px" />
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Label>
+              <Text size="lg" c="dark">
+                {userName}
+              </Text>
+              <Text size="sm" c="gray">
+                LoginID: {LoginId}
+              </Text>
+            </Menu.Label>
+
+            <Menu.Divider />
+
+            <Menu.Item
+              leftSection={<IconLogout style={iconStyle} />}
+              onClick={() => handleLogout()}
+            >
+              ログアウト
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </div>
-      <UserBox>
-        <img
-          className="account-icon"
-          alt="Account Button"
-          src="/account-icon.svg"
-        />
-        <UserInfo>
-          <p className="userName">{userName}</p>
-          <p>Login ID: {LoginId}</p>
-        </UserInfo>
-        <LogoutButton className="button-hover" onClick={() => handleLogout()}>
-          ログアウト
-        </LogoutButton>
-      </UserBox>
     </StyledHeader>
   );
 }
