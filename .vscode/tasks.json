@@ -13,7 +13,7 @@
             "dependsOn": [
                 "Run Docker Compose"
             ],
-            "command": "npm run dev",
+            "command": "npm i && npm run dev",
         },
         {
             "label": "Run Frontend",
@@ -21,7 +21,7 @@
             "dependsOn": [
                 "Run Docker Compose"
             ],
-            "command": "cd ${workspaceFolder}/frontend && npm run dev",
+            "command": "cd ${workspaceFolder}/frontend && npm i && npm run dev",
         },
         {
             "label": "dev",
