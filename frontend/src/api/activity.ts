@@ -54,3 +54,10 @@ export const organizationStatus = async () => {
   const res = await axios.get(`/api/organization/${organizationId}/status`);
   return res.data as organizationStatusType;
 };
+
+export const allLeave = async () => {
+  console.log("POST /api/organization/:organizationId/all-leave");
+  const organizationId = sessionStorage.getItem("organizationId");
+  const res = await axios.post(`/api/organization/${organizationId}/all-leave`);
+  return res;
+};

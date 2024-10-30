@@ -16,6 +16,7 @@ const reload = (roomId: string) => {
 export enum notifyTypeEnum {
   ATTEND = "attend",
   LEAVE = "leave",
+  ALL_LEAVE = "allLeave",
 }
 
 const notify = (roomId: string, type: notifyTypeEnum) => {
