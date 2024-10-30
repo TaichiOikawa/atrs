@@ -3,6 +3,8 @@ import { Not } from "typeorm";
 import { AppDataSource } from "../../../data-source";
 import { Activity } from "../../entity/Activity";
 import { PermissionEnum, User } from "../../entity/User";
+import allLeave from "../../modules/allLeave";
+import { notifyTypeEnum, socketStatusNotify } from "../../socket/events/room";
 
 const organizationRouter = Router();
 const ActivityRepository = AppDataSource.getRepository(Activity);
@@ -128,6 +130,12 @@ organizationRouter.get("/:organization_id/status", async (req, res) => {
     return;
   }
   res.send(activeUsers);
+});
+
+organizationRouter.post("/:organization_id/all-leave", async (req, res) => {
+  await allLeave();
+  socketStatusNotify(notifyTypeEnum.ALL_LEAVE);
+  res.status(200).send("All leave done");
 });
 
 export default organizationRouter;

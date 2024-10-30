@@ -1,14 +1,24 @@
-import { Container, Flex, Group, rem, Stack, Text } from "@mantine/core";
+import {
+  Button,
+  Container,
+  Flex,
+  Group,
+  rem,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useSound from "use-sound";
+import { allLeave } from "../../../api/activity";
 import { getUsers } from "../../../api/users";
 import useSocket from "../../../components/hooks/useSocket";
 import apiBaseUrl from "../../../config/index.config";
 import { datetime } from "../../../types/datetime";
 import { PermissionEnum, UsersType } from "../../../types/user";
 import MemberCard from "./MemberCard";
+import AllLeave from "/sound/allLeave_notify_sound.mp3";
 import AttendSound from "/sound/attend_notify_sound.mp3";
 import LeaveSound from "/sound/leave_notify_sound.mp3";
 
@@ -41,6 +51,7 @@ function Members() {
 
   const [attendSoundPlay] = useSound(AttendSound);
   const [leaveSoundPlay] = useSound(LeaveSound);
+  const [allLeaveSoundPlay] = useSound(AllLeave);
 
   const iconStyle = { width: rem(25), height: rem(25) };
 
@@ -82,6 +93,9 @@ function Members() {
         } else if (msg == "leave") {
           console.log("[websocket] leave notify");
           leaveSoundPlay();
+        } else if (msg == "allLeave") {
+          console.log("[websocket] allLeave notify");
+          allLeaveSoundPlay();
         }
       });
     }
@@ -90,11 +104,18 @@ function Members() {
       socket.off("notify");
       socket.emit("leave", "user_status_notify");
     };
-  }, [notifySound]);
+  }, [notifySound, attendSoundPlay, leaveSoundPlay, allLeaveSoundPlay, socket]);
+
+  const handleAllLeave = async () => {
+    await allLeave();
+  };
 
   return (
     <>
       <Flex w="100%" justify="flex-end" align="center" gap="md">
+        <Button onClick={handleAllLeave} color="orange">
+          全員退席
+        </Button>
         <Text>最終更新: {datetime.format(latestReloadTime)}</Text>
         <Group onClick={() => setNotifySound(!notifySound)}>
           {notifySound ? (

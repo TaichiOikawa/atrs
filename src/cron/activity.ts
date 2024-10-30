@@ -1,54 +1,18 @@
 import { schedule } from "node-cron";
-import { IsNull, Raw } from "typeorm";
+import { Raw } from "typeorm";
 import { AppDataSource } from "../../data-source";
 import { Activity } from "../../src/entity/Activity";
 import { Status, StatusEnum } from "../../src/entity/Status";
 import postWebhook from "../../src/modules/discordWebhook";
-import { datetime, timeDiff } from "../../src/modules/time";
-import { socketStatusReload } from "../../src/socket/events/room";
+import { datetime } from "../../src/modules/time";
+import allLeave from "../modules/allLeave";
 
 const ActivityRepository = AppDataSource.getRepository(Activity);
 const statusRepository = AppDataSource.getRepository(Status);
 
 const AutoLeave = async () => {
   console.log("[AUTO LEAVE] WORKING");
-  const activities = await ActivityRepository.find({
-    where: {
-      leaveTime: IsNull(),
-    },
-    relations: ["user"],
-  });
-  activities.forEach(async (activity) => {
-    activity.leaveTime = new Date();
-    let diff = timeDiff(activity.attendTime, activity.leaveTime);
-    activity.activityTime = `${diff.hours}:${diff.minutes}:${diff.seconds}`;
-    activity.isAutoLeave = true;
-    await ActivityRepository.save(activity);
-    console.log(`[AUTO LEAVE] UserID: ${activity.user.login_id}  [auto leave]`);
-  });
-
-  const statuses = await statusRepository.find({
-    where: {
-      status: StatusEnum.ACTIVE,
-    },
-    relations: ["user"],
-  });
-  statuses.forEach(async (status) => {
-    const activity = await ActivityRepository.findOne({
-      where: {
-        user: status.user,
-      },
-    });
-    if (activity?.leaveTime === null) {
-      activity.leaveTime = new Date();
-      let diff = timeDiff(activity.attendTime, activity.leaveTime);
-      activity.activityTime = `${diff.hours}:${diff.minutes}:${diff.seconds}`;
-      activity.isAutoLeave = true;
-      await ActivityRepository.save(activity);
-    }
-    socketStatusReload();
-    console.log(`[AUTO LEAVE] UserID: ${status.user.login_id}  [auto leave]`);
-  });
+  await allLeave();
   console.log("[AUTO LEAVE] FINISHED");
 };
 
