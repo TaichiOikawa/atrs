@@ -1,6 +1,6 @@
 {
   "name": "atrs",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "./src/app.ts",
   "scripts": {
     "start": "NODE_ENV=production ts-node --transpile-only src/app.ts",

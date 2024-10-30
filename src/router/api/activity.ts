@@ -64,11 +64,11 @@ activityRouter.get("/", async (req, res) => {
     .getRawOne();
 
   const activity = {
-    attendTime: activityInDb?.attendTime || null,
-    leaveTime: activityInDb?.leaveTime || null,
-    activityTime: activityInDb?.activityTime || null,
-    weeklyTime: weeklyTime?.weeklyTime || null,
-    totalTime: totalTime?.totalTime || null,
+    attendTime: activityInDb?.attendTime ?? null,
+    leaveTime: activityInDb?.leaveTime ?? null,
+    activityTime: activityInDb?.activityTime ?? null,
+    weeklyTime: weeklyTime?.weeklyTime ?? null,
+    totalTime: totalTime?.totalTime ?? null,
   };
 
   res.send(activity);

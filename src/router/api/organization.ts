@@ -91,7 +91,7 @@ organizationRouter.get("/:organization_id/users", async (req, res) => {
       login_id: user.login_id,
       name: user.name,
       permission: user.permission,
-      status: user.status?.status || null,
+      status: user.status?.status ?? null,
       activity: activityInfo
         ? {
             attendTime: activityInfo.attendTime,

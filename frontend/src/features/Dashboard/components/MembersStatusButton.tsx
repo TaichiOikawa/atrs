@@ -78,7 +78,7 @@ function MemberStatusButton(reload?: any) {
     numberOfUsers: memberStatus?.length || 0,
     numberOfActive:
       memberStatus?.filter((user) => user.status === StatusEnum.ACTIVE)
-        .length || 0,
+        .length ?? 0,
   };
 
   return (
