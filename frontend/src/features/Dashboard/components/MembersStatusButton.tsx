@@ -63,7 +63,7 @@ const StyledMemberStatusButton = styled.button`
   }
 `;
 
-function MemberStatusButton(reload?: boolean | string | number) {
+function MemberStatusButton(reload?: any) {
   const [memberStatus, setMemberStatus] =
     useState<organizationStatusType>(null);
   const [opened, { open, close }] = useDisclosure();
