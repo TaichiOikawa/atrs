@@ -35,8 +35,9 @@ function Header() {
     });
   };
 
-  const userName: string = sessionStorage.getItem("name") || "Guest";
-  const LoginId: string = sessionStorage.getItem("loginId") || "Guest";
+  const userName: string =
+    sessionStorage.getItem("name")?.replace(" ", "") ?? "Guest";
+  const LoginId: string = sessionStorage.getItem("loginId") ?? "Guest";
 
   const iconStyle = { width: rem(18), height: rem(18) };
 

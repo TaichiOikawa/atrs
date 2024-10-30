@@ -45,8 +45,8 @@ const PostNotification = async () => {
 
     userActivityMap.get(userName).activities.push({
       attendTime: datetime.format(activity.attendTime),
-      leaveTime: datetime.format(activity.leaveTime) || null,
-      activityTime: activity.activityTime || null,
+      leaveTime: datetime.format(activity.leaveTime) ?? null,
+      activityTime: activity.activityTime ?? null,
     });
   });
 

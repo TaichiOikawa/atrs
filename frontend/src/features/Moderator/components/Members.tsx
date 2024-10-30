@@ -7,7 +7,8 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { IconVolume, IconVolumeOff } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { IconVolume, IconVolumeOff, IconX } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useSound from "use-sound";
@@ -16,6 +17,7 @@ import { getUsers } from "../../../api/users";
 import useSocket from "../../../components/hooks/useSocket";
 import apiBaseUrl from "../../../config/index.config";
 import { datetime } from "../../../types/datetime";
+import { StatusEnum } from "../../../types/status";
 import { PermissionEnum, UsersType } from "../../../types/user";
 import MemberCard from "./MemberCard";
 import AllLeave from "/sound/allLeave_notify_sound.mp3";
@@ -41,6 +43,8 @@ switch (sessionStorage.getItem("permission")) {
   default:
     isEdit = false;
 }
+
+const xIcon = <IconX size={rem(20)} />;
 
 function Members() {
   const [data, setData] = useState<UsersType | null>(null);
@@ -107,15 +111,46 @@ function Members() {
   }, [notifySound, attendSoundPlay, leaveSoundPlay, allLeaveSoundPlay, socket]);
 
   const handleAllLeave = async () => {
-    await allLeave();
+    try {
+      await allLeave();
+    } catch (error) {
+      console.error(`[allLeave] error:`, error);
+      notifications.show({
+        title: "エラーが発生しました",
+        message: "もう一度お試しください",
+        icon: xIcon,
+        color: "red",
+      });
+      return;
+    }
+
+    notifications.show({
+      message: "全員の退席を記録しました",
+      color: "violet",
+    });
   };
+
+  const onlineMembers =
+    data?.filter((user) => user.status === StatusEnum.ACTIVE).length ?? 0;
+  const allLeaveButtonOption = {
+    disabled: true,
+  };
+  if (onlineMembers > 0) {
+    allLeaveButtonOption.disabled = false;
+  }
 
   return (
     <>
       <Flex w="100%" justify="flex-end" align="center" gap="md">
-        <Button onClick={handleAllLeave} color="orange">
-          全員退席
-        </Button>
+        {isEdit && (
+          <Button
+            onClick={handleAllLeave}
+            color="orange"
+            {...allLeaveButtonOption}
+          >
+            全員退席
+          </Button>
+        )}
         <Text>最終更新: {datetime.format(latestReloadTime)}</Text>
         <Group onClick={() => setNotifySound(!notifySound)}>
           {notifySound ? (
