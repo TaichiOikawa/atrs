@@ -1,11 +1,9 @@
 {
-    "cSpell.words": [
-        "ATRS",
-        "authed",
-        "mantine",
-        "newid",
-        "Styletron",
-        "tabler",
-        "typeorm"
-    ]
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.addMissingImports": "explicit"
+  },
+  "markuplint.enable": true
 }
