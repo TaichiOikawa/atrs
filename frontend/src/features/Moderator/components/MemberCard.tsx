@@ -77,6 +77,7 @@ const StyledMemberCard = styled.div`
   position: relative;
   width: fit-content;
   width: 180px;
+  height: 120px
   transition: background-color 0.3s;
 
   & .frame {
