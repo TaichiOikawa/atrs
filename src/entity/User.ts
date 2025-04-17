@@ -33,6 +33,9 @@ export class User {
   @Column({ type: "varchar", length: 128, nullable: true })
   password: string;
 
+  @Column({ type: "varchar", length: 128, nullable: true, unique: true })
+  nfcId: string;
+
   @Column({
     type: "enum",
     enum: PermissionEnum,

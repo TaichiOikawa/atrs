@@ -166,4 +166,61 @@ activityRouter.get("/status", async (req, res) => {
   res.send(activityInDb.status);
 });
 
+activityRouter.post("/nfc", async (req, res) => {
+  console.debug("POST /api/activity/nfc");
+
+  if (!req.body.nfcId) return res.status(400).send("nfcId is required");
+  const user = await userRepository.findOne({
+    where: {
+      nfcId: req.body.nfcId,
+    },
+  });
+
+  if (!user) {
+    return res.status(400).send("User not found");
+  }
+
+  const activityInDb = await ActivityRepository.findOne({
+    where: {
+      user: user,
+      leaveTime: IsNull(),
+    },
+    order: { activity_id: "DESC" },
+    relations: ["user"],
+  });
+
+  if (activityInDb) {
+    // 既に出席記録がある場合は退席時間を記録
+    activityInDb.leaveTime = new Date();
+    let diff = timeDiff(activityInDb.attendTime, activityInDb.leaveTime);
+    activityInDb.activityTime = `${diff.hours}:${diff.minutes}:${diff.seconds}`;
+    await ActivityRepository.save(activityInDb);
+    // statusを更新
+    await statusRepository.save({
+      user_id: user.user_id,
+      status: StatusEnum.LEAVE,
+    });
+    res.send(StatusEnum.LEAVE);
+    socketStatusNotify(notifyTypeEnum.LEAVE);
+    console.log("socketStatusNotify(notifyTypeEnum.LEAVE)");
+  } else {
+    // 出席記録がない場合は新規レコード
+    const now = new Date();
+    await ActivityRepository.insert({
+      user: user,
+      attendTime: now,
+    });
+    // statusを更新
+    await statusRepository.save({
+      user_id: user.user_id,
+      status: StatusEnum.ACTIVE,
+    });
+    res.send(StatusEnum.ACTIVE);
+    socketStatusNotify(notifyTypeEnum.ATTEND);
+    console.log("socketStatusNotify(notifyTypeEnum.ATTEND)");
+  }
+
+  socketStatusReload();
+});
+
 export default activityRouter;

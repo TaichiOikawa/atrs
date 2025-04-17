@@ -37,6 +37,21 @@ export class jwtHelper {
   }
 
   static async apiVerifyToken(req: any, res: any, next: any) {
+    if (req.headers && req.headers.authorization) {
+      console.log("req.headers.authorization:", req.headers.authorization);
+      const AccessToken = req.headers.authorization.split(" ");
+      if (!AccessToken && AccessToken[0] !== "Bearer" && !AccessToken[1]) {
+        return res.status(401).json({ isAuthenticated: false });
+      }
+      if (
+        process.env.CLIENT_TOKEN &&
+        AccessToken[1] === process.env.CLIENT_TOKEN
+      ) {
+        res.locals.isAuthenticated = true;
+        return next();
+      }
+    }
+
     let token = "";
     if (req.cookies.jwtToken) {
       token = req.cookies.jwtToken;
