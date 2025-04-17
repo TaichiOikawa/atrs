@@ -47,7 +47,7 @@ type MemberStatusContentProps = {
 function MemberStatusContent(props: MemberStatusContentProps) {
   const formatTime = (time: string) => {
     if (!time) return "";
-    return time.slice(5);
+    return time.slice(10);
   };
   const formatActivityTime = (time: string) => {
     if (!time) return "";
@@ -58,9 +58,9 @@ function MemberStatusContent(props: MemberStatusContentProps) {
     <StyledMemberStatusContent>
       <h4>{props.name}</h4>
       <div>
-        <p>出席時間: {formatTime(props.attendTime)}</p>
-        <p>退席時間: {formatTime(props.leaveTime)}</p>
-        <p>活動時間: {formatActivityTime(props.activityTime)}</p>
+        <p>出: {formatTime(props.attendTime)}</p>
+        <p>退: {formatTime(props.leaveTime)}</p>
+        <p>{formatActivityTime(props.activityTime)}</p>
       </div>
     </StyledMemberStatusContent>
   );
@@ -73,10 +73,10 @@ const StyledMemberCard = styled.div`
   flex-direction: column;
   gap: 10px;
   justify-content: center;
-  padding: 12px 15px;
+  padding: 8px 12px;
   position: relative;
   width: fit-content;
-  width: 310px;
+  width: 180px;
   transition: background-color 0.3s;
 
   & .frame {
